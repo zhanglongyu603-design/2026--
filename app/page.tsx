@@ -126,7 +126,7 @@ export default function Home() {
               >
                 Design Rocket
               </p>
-              <p className="mt-1 text-[13px] font-medium tracking-[0.22em]">CERTIFICATES</p>
+              <p className="mt-1 text-[13px] font-medium tracking-[0.22em]">AIGC</p>
             </div>
 
             <p className="mt-40 text-[13px] font-semibold tracking-[0.28em] text-white">
