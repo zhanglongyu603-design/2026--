@@ -124,7 +124,7 @@ export default function Home() {
                 className="text-[28px] leading-[0.95] tracking-tight"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
-                Design Rocket
+                张龙煜
               </p>
               <p className="mt-1 text-[13px] font-medium tracking-[0.22em]">AIGC</p>
             </div>
