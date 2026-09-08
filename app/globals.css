@@ -121,30 +121,22 @@ img {
   padding-top: 0;
 }
 
-.hero-intro {
-  position: absolute;
-  z-index: 2;
-  top: -0.78em;
-  left: clamp(1.5rem, 7vw, 7rem);
-  color: #151515;
-  font-family: var(--font-script);
-  font-size: clamp(2.2rem, 5.2vw, 5.5rem);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  text-transform: none;
-  transform: rotate(-7deg);
-  -webkit-text-fill-color: #151515;
-}
-
 .hero-name {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  width: 100%;
+  width: 122%;
+  margin-left: -11%;
   white-space: nowrap;
-  font-size: clamp(3.25rem, 14.5vw, 13.75rem);
+  font-size: clamp(3.9rem, 16.2vw, 15.75rem);
   line-height: 0.76;
   letter-spacing: 0;
+  transform: scaleX(0.82);
+  transform-origin: center bottom;
+}
+
+.hero-word-end {
+  margin-right: 0.08em;
 }
 
 .hero-footer {
@@ -325,10 +317,6 @@ img {
 
   .hero-panel nav {
     margin-inline: 1rem;
-  }
-
-  .hero-intro {
-    left: 1rem;
   }
 
   .hero-video {
