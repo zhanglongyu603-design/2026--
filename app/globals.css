@@ -109,9 +109,10 @@ img {
 
 .hero-title-wrap {
   right: auto;
-  bottom: clamp(0.75rem, 1.5vw, 1.5rem);
-  left: clamp(1rem, 2vw, 2rem);
-  width: calc(100% - clamp(2rem, 4vw, 4rem));
+  bottom: auto;
+  left: clamp(1.5rem, 2.8vw, 2.75rem);
+  top: 41%;
+  width: calc(100% - clamp(3rem, 5.6vw, 5.5rem));
   padding: 0;
 }
 
@@ -120,27 +121,25 @@ img {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(0.2rem, 0.7vw, 0.65rem);
+  gap: clamp(1.65rem, 5.2vh, 3.4rem);
   margin: 0;
   color: #f06fb6;
   background: none;
   -webkit-text-fill-color: #f06fb6;
-  font-family: var(--font-display);
-  line-height: 0.82;
+  font-family: var(--font-body);
+  line-height: 0.9;
   visibility: visible;
   opacity: 1;
 }
 
 .hero-title-line {
   display: block;
-  font-size: clamp(4.5rem, 9.8vw, 9rem);
+  font-size: clamp(3.25rem, 10.2vw, 9.5rem);
   letter-spacing: -0.035em;
 }
 
 .hero-title-name {
   white-space: nowrap;
-  font-size: clamp(3.1rem, 7.8vw, 7.25rem);
-  letter-spacing: -0.025em;
 }
 
 .hero-footer {
