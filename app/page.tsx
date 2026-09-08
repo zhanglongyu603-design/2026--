@@ -12,7 +12,7 @@ import {
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-const portrait = '/zhanglongyu-avatar.png';
+const portrait = '/zhanglongyu-avatar-transparent.png';
 
 const marqueeImages = [
   'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
