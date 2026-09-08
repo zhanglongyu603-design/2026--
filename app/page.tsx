@@ -208,7 +208,7 @@ function HeroSection() {
         </nav>
       </FadeIn>
 
-      <FadeIn delay={0.15} y={40} className="hero-title-wrap absolute inset-x-0 z-20 overflow-visible">
+      <div className="hero-title-wrap absolute inset-x-0 z-20 overflow-visible">
         <h1
           id="hero-heading"
           className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
@@ -225,7 +225,7 @@ function HeroSection() {
             ))}
           </span>
         </h1>
-      </FadeIn>
+      </div>
 
       <FadeIn
         delay={0.6}
