@@ -355,7 +355,7 @@ function AnimatedText({ children }: { children: string }) {
   return (
     <p
       ref={ref}
-      className="max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
+      className="relative max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
       aria-label={children}
     >
       {children.split('').map((character, index) => {
@@ -470,7 +470,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
 
   return (
-    <div ref={container} className="h-[85vh] min-h-[620px]">
+    <div ref={container} className="relative h-[85vh] min-h-[620px]">
       <motion.article
         style={{ ...cardStyle, scale }}
         className="project-card sticky overflow-hidden rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 text-[#D7E2EA] sm:rounded-[50px] sm:p-6 md:rounded-[60px] md:p-8"
