@@ -1,303 +1,565 @@
+'use client';
+
 import {
-  AtSign,
-  ArrowRight,
-  BriefcaseBusiness,
-  Camera,
-  Globe2,
-  Music2,
-  Play,
-  type LucideIcon,
-} from 'lucide-react';
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
+} from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
-const heroVideo =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260419_064822_f120e48a-d545-45dd-a02d-facb07829888.mp4';
+const portrait =
+  'https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png';
 
-const lessons = [
-  'Learn how to spot AI opportunities that boost productivity across roles and deliver visible results.',
-  'Build structures that support your team so AI efficiencies multiply across the organization.',
-  'Gain the skills to drive culture change like securing buy-in and reducing resistance.',
-  'Get frameworks to deliver AI pilots that prove impact fast and build credibility with measurable results.',
+const marqueeImages = [
+  'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
+  'https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif',
+  'https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif',
+  'https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif',
+  'https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif',
+  'https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif',
+  'https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif',
+  'https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif',
+  'https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif',
+  'https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif',
+  'https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif',
+  'https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif',
+  'https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif',
+  'https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif',
+  'https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif',
+  'https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif',
+  'https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif',
+  'https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif',
+  'https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif',
+  'https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif',
+  'https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif',
 ];
 
-const socials: { label: string; Icon: LucideIcon }[] = [
-  { label: 'Facebook', Icon: Globe2 },
-  { label: 'Twitter', Icon: AtSign },
-  { label: 'Instagram', Icon: Camera },
-  { label: 'YouTube', Icon: Play },
-  { label: 'LinkedIn', Icon: BriefcaseBusiness },
-  { label: 'TikTok', Icon: Music2 },
+const aboutObjects = [
+  {
+    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png',
+    alt: 'Chrome moon sculpture',
+    className: 'top-[4%] left-[1%] w-[120px] sm:left-[2%] sm:w-[160px] md:left-[4%] md:w-[210px]',
+    delay: 0.1,
+    x: -80,
+  },
+  {
+    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png',
+    alt: 'Abstract chrome sculpture',
+    className:
+      'bottom-[8%] left-[3%] w-[100px] sm:left-[6%] sm:w-[140px] md:left-[10%] md:w-[180px]',
+    delay: 0.25,
+    x: -80,
+  },
+  {
+    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png',
+    alt: 'Glossy block sculpture',
+    className: 'top-[4%] right-[1%] w-[120px] sm:right-[2%] sm:w-[160px] md:right-[4%] md:w-[210px]',
+    delay: 0.15,
+    x: 80,
+  },
+  {
+    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png',
+    alt: 'Colorful 3D forms',
+    className:
+      'bottom-[8%] right-[3%] w-[130px] sm:right-[6%] sm:w-[170px] md:right-[10%] md:w-[220px]',
+    delay: 0.3,
+    x: 80,
+  },
 ];
 
-function Step({ number, children }: { number: number; children: React.ReactNode }) {
+const services = [
+  {
+    name: '3D Modeling',
+    description:
+      'Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.',
+  },
+  {
+    name: 'Rendering',
+    description:
+      'High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.',
+  },
+  {
+    name: 'Motion Design',
+    description:
+      'Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.',
+  },
+  {
+    name: 'Branding',
+    description:
+      'Crafting cohesive visual identities—from logos to full brand systems—that communicate a clear and memorable presence.',
+  },
+  {
+    name: 'Web Design',
+    description:
+      'Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.',
+  },
+];
+
+const projects = [
+  {
+    name: 'Nextlevel Studio',
+    category: 'Client',
+    images: [
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055451_e317bf2d-28d4-48cc-86b0-6f72f25b6327.png&w=1280&q=85',
+    ],
+  },
+  {
+    name: 'Aura Brand Identity',
+    category: 'Personal',
+    images: [
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055753_adc5dcbd-a8e6-49c0-b43a-9b030d835cea.png&w=1280&q=85',
+    ],
+  },
+  {
+    name: 'Solaris Digital',
+    category: 'Client',
+    images: [
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85',
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055818_9d062121-ad7e-46b9-999a-1a6a692ef1ee.png&w=1280&q=85',
+    ],
+  },
+];
+
+type FadeInProps = {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  x?: number;
+  y?: number;
+  as?: ElementType;
+};
+
+function FadeIn({
+  children,
+  className,
+  delay = 0,
+  duration = 0.7,
+  x = 0,
+  y = 30,
+  as = 'div',
+}: FadeInProps) {
+  const Component = motion.create(as);
+
   return (
-    <li className="mb-6 flex items-start gap-5 last:mb-0">
-      <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#DCFF00] text-xs font-bold text-[#0A0A0A]">
-        {number}
-      </span>
-      <p className="text-[17px] leading-[1.55] text-[#E8E8E8]">{children}</p>
-    </li>
+    <Component
+      className={className}
+      initial={{ opacity: 0, x, y }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: '50px', amount: 0 }}
+      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      {children}
+    </Component>
   );
 }
 
-function Divider() {
+function ContactButton({ className = '' }: { className?: string }) {
   return (
-    <div className="flex justify-center py-8" aria-hidden="true">
-      <span className="h-px w-24 bg-white/20" />
+    <a
+      href="mailto:hello@jack3d.com?subject=Let%27s%20create%20something"
+      className={`contact-button ${className}`}
+    >
+      Contact Me
+      <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+    </a>
+  );
+}
+
+function Magnet({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [transform, setTransform] = useState('translate3d(0, 0, 0)');
+  const [active, setActive] = useState(false);
+
+  const updatePosition = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const bounds = ref.current.getBoundingClientRect();
+    const centerX = bounds.left + bounds.width / 2;
+    const centerY = bounds.top + bounds.height / 2;
+    const distanceX = event.clientX - centerX;
+    const distanceY = event.clientY - centerY;
+    const withinPadding =
+      Math.abs(distanceX) <= bounds.width / 2 + 150 &&
+      Math.abs(distanceY) <= bounds.height / 2 + 150;
+
+    if (withinPadding) {
+      setActive(true);
+      setTransform(`translate3d(${distanceX / 3}px, ${distanceY / 3}px, 0)`);
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={updatePosition}
+      onMouseLeave={() => {
+        setActive(false);
+        setTransform('translate3d(0, 0, 0)');
+      }}
+      style={{
+        transform,
+        transition: active ? 'transform 0.3s ease-out' : 'transform 0.6s ease-in-out',
+        willChange: 'transform',
+      }}
+    >
+      {children}
     </div>
   );
 }
 
-function PrimaryButton({ label, href = '#enroll' }: { label: string; href?: string }) {
+function HeroSection() {
   return (
-    <a
-      href={href}
-      className="inline-flex items-center gap-3 rounded-lg bg-[#DCFF00] px-6 py-3 font-bold text-[#0A0A0A] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#c9ea00] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCFF00]"
-    >
-      {label}
-      <ArrowRight className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-    </a>
-  );
-}
+    <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip" aria-labelledby="hero-heading">
+      <FadeIn y={-20}>
+        <nav
+          aria-label="Primary navigation"
+          className="relative z-30 flex justify-between px-6 pt-6 text-sm font-medium uppercase tracking-wider text-[#D7E2EA] md:px-10 md:pt-8 md:text-lg lg:text-[1.4rem]"
+        >
+          <a className="nav-link" href="#about">About</a>
+          <a className="nav-link" href="#services">Price</a>
+          <a className="nav-link" href="#projects">Projects</a>
+          <a className="nav-link" href="#contact">Contact</a>
+        </nav>
+      </FadeIn>
 
-function SolidButton({ label, href = '#enroll' }: { label: string; href?: string }) {
-  return (
-    <a
-      href={href}
-      className="inline-block rounded-lg bg-white px-8 py-3 font-bold text-[#0A0A0A] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#E8E8E8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-    >
-      {label}
-    </a>
-  );
-}
+      <FadeIn delay={0.15} y={40} className="relative z-0 mt-6 overflow-hidden sm:mt-4 md:-mt-5">
+        <h1
+          id="hero-heading"
+          className="hero-heading w-full whitespace-nowrap text-center text-[14vw] font-black leading-none tracking-tight uppercase sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw]"
+        >
+          Hi, i&apos;m jack
+        </h1>
+      </FadeIn>
 
-function VideoCard({ src, label }: { src: string; label: string }) {
-  return (
-    <a
-      href="#enroll"
-      aria-label={label}
-      className="group block overflow-hidden rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCFF00]"
-    >
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="h-[370px] w-full rounded-[14px] object-cover transition-transform duration-700 group-hover:scale-[1.03] motion-reduce:transition-none"
+      <FadeIn
+        delay={0.6}
+        y={30}
+        className="pointer-events-none absolute top-1/2 left-1/2 z-10 w-[280px] -translate-x-1/2 -translate-y-1/2 sm:top-auto sm:bottom-0 sm:w-[360px] sm:translate-y-0 md:w-[440px] lg:w-[520px]"
       >
-        <source src={src} type="video/mp4" />
-      </video>
+        <div className="pointer-events-auto">
+          <Magnet>
+            <img
+              src={portrait}
+              alt="Jack, 3D creator"
+              className="block h-auto w-full select-none"
+              draggable={false}
+            />
+          </Magnet>
+        </div>
+      </FadeIn>
+
+      <div className="relative z-20 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
+        <FadeIn delay={0.35} y={20}>
+          <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-light leading-snug tracking-wide text-[#D7E2EA] uppercase sm:max-w-[220px] md:max-w-[260px]">
+            A 3D creator driven by crafting striking and unforgettable projects
+          </p>
+        </FadeIn>
+        <FadeIn delay={0.5} y={20}>
+          <ContactButton />
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function MarqueeRow({ images, direction }: { images: string[]; direction: 'left' | 'right' }) {
+  const [offset, setOffset] = useState(0);
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      if (!rowRef.current) return;
+      const section = rowRef.current.closest('section');
+      if (!section) return;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      setOffset((window.scrollY - sectionTop + window.innerHeight) * 0.3);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  const translate = direction === 'right' ? offset - 200 : -(offset - 200);
+  const repeated = [...images, ...images, ...images];
+
+  return (
+    <div className="marquee-viewport">
+      <div
+        ref={rowRef}
+        className="flex w-max gap-3"
+        style={{ transform: `translate3d(${translate}px, 0, 0)`, willChange: 'transform' }}
+      >
+        {repeated.map((src, index) => (
+          <img
+            key={`${src}-${index}`}
+            src={src}
+            alt=""
+            loading="lazy"
+            className="h-[270px] w-[420px] shrink-0 rounded-2xl object-cover"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MarqueeSection() {
+  return (
+    <section className="overflow-hidden bg-[#0C0C0C] pt-24 pb-10 sm:pt-32 md:pt-40" aria-label="Selected motion work">
+      <div className="flex flex-col gap-3">
+        <MarqueeRow images={marqueeImages.slice(0, 11)} direction="right" />
+        <MarqueeRow images={marqueeImages.slice(11)} direction="left" />
+      </div>
+    </section>
+  );
+}
+
+function AnimatedCharacter({ character, progress, range }: { character: string; progress: ReturnType<typeof useScroll>['scrollYProgress']; range: [number, number] }) {
+  const opacity = useTransform(progress, range, [0.2, 1]);
+
+  return (
+    <span className="relative inline-block" aria-hidden="true">
+      <span className="invisible">{character}</span>
+      <motion.span className="absolute inset-0" style={{ opacity }}>
+        {character}
+      </motion.span>
+    </span>
+  );
+}
+
+function AnimatedText({ children }: { children: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.2'] });
+
+  return (
+    <p
+      ref={ref}
+      className="max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
+      aria-label={children}
+    >
+      {children.split('').map((character, index) => {
+        const start = index / children.length;
+        const end = Math.min(1, start + 1 / children.length);
+        return (
+          <AnimatedCharacter
+            key={`${character}-${index}`}
+            character={character === ' ' ? '\u00A0' : character}
+            progress={scrollYProgress}
+            range={[start, end]}
+          />
+        );
+      })}
+    </p>
+  );
+}
+
+function AboutSection() {
+  const aboutCopy =
+    "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!";
+
+  return (
+    <section
+      id="about"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10"
+      aria-labelledby="about-heading"
+    >
+      {aboutObjects.map((object) => (
+        <FadeIn
+          key={object.src}
+          delay={object.delay}
+          duration={0.9}
+          x={object.x}
+          y={0}
+          className={`pointer-events-none absolute z-0 ${object.className}`}
+        >
+          <img src={object.src} alt={object.alt} className="h-auto w-full" loading="lazy" />
+        </FadeIn>
+      ))}
+
+      <div className="relative z-10 flex flex-col items-center gap-10 sm:gap-14 md:gap-16">
+        <FadeIn y={40}>
+          <h2
+            id="about-heading"
+            className="hero-heading text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase"
+          >
+            About me
+          </h2>
+        </FadeIn>
+        <div className="flex flex-col items-center gap-16 px-7 sm:gap-20 md:gap-24">
+          <AnimatedText>{aboutCopy}</AnimatedText>
+          <ContactButton />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServicesSection() {
+  return (
+    <section
+      id="services"
+      className="rounded-t-[40px] bg-white px-5 py-20 text-[#0C0C0C] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
+      aria-labelledby="services-heading"
+    >
+      <h2
+        id="services-heading"
+        className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20 md:mb-28"
+      >
+        Services
+      </h2>
+      <ol className="mx-auto max-w-5xl border-t border-[rgba(12,12,12,0.15)]">
+        {services.map((service, index) => (
+          <FadeIn key={service.name} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
+            <div className="grid grid-cols-[0.32fr_0.68fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
+              <span className="text-[clamp(3rem,10vw,140px)] font-black leading-none">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-medium uppercase">{service.name}</h3>
+                <p className="mt-3 max-w-2xl text-[clamp(0.85rem,1.6vw,1.25rem)] font-light leading-relaxed opacity-60">
+                  {service.description}
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function LiveProjectButton() {
+  return (
+    <a
+      href="#contact"
+      className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-8 py-3 text-sm font-medium tracking-widest text-[#D7E2EA] uppercase transition-colors hover:bg-[#D7E2EA]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D7E2EA] sm:px-10 sm:py-3.5 sm:text-base"
+    >
+      Live Project
+      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
     </a>
+  );
+}
+
+function ProjectCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
+  const targetScale = 1 - (projects.length - 1 - index) * 0.03;
+  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+
+  const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
+
+  return (
+    <div ref={container} className="h-[85vh] min-h-[620px]">
+      <motion.article
+        style={{ ...cardStyle, scale }}
+        className="project-card sticky overflow-hidden rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 text-[#D7E2EA] sm:rounded-[50px] sm:p-6 md:rounded-[60px] md:p-8"
+        aria-labelledby={`project-${index}`}
+      >
+        <div className="mb-5 grid grid-cols-[auto_1fr] items-end gap-x-5 gap-y-4 sm:mb-6 md:grid-cols-[auto_0.45fr_1fr_auto] md:gap-x-8">
+          <span className="text-[clamp(3rem,8vw,120px)] font-black leading-[0.75]">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <p className="self-center text-sm font-light tracking-[0.18em] uppercase opacity-60 sm:text-base">
+            {project.category}
+          </p>
+          <h3
+            id={`project-${index}`}
+            className="col-span-2 text-[clamp(1.4rem,3vw,3.5rem)] font-medium leading-none uppercase md:col-span-1"
+          >
+            {project.name}
+          </h3>
+          <div className="col-span-2 md:col-span-1">
+            <LiveProjectButton />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[0.4fr_0.6fr] gap-3">
+          <div className="grid gap-3">
+            <img
+              src={project.images[0]}
+              alt={`${project.name} detail view`}
+              loading="lazy"
+              className="h-[clamp(130px,16vw,230px)] w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+            />
+            <img
+              src={project.images[1]}
+              alt={`${project.name} material study`}
+              loading="lazy"
+              className="h-[clamp(160px,22vw,340px)] w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+            />
+          </div>
+          <img
+            src={project.images[2]}
+            alt={`${project.name} hero artwork`}
+            loading="lazy"
+            className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+          />
+        </div>
+      </motion.article>
+    </div>
+  );
+}
+
+function ProjectsSection() {
+  return (
+    <section
+      id="projects"
+      className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] px-5 pt-20 pb-32 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
+      aria-labelledby="projects-heading"
+    >
+      <FadeIn y={40}>
+        <h2
+          id="projects-heading"
+          className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20"
+        >
+          Project
+        </h2>
+      </FadeIn>
+
+      <div className="mx-auto max-w-[1500px]">
+        {projects.map((project, index) => (
+          <ProjectCard key={project.name} project={project} index={index} />
+        ))}
+      </div>
+
+      <footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center sm:pt-24">
+        <p className="text-sm font-medium tracking-[0.28em] text-[#D7E2EA]/60 uppercase">Available for selected projects</p>
+        <ContactButton />
+        <p className="text-sm text-[#D7E2EA]/40">© 2026 Jack — 3D Creator</p>
+      </footer>
+    </section>
   );
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#050505] px-4 py-10 font-sans">
-      <article className="mx-auto max-w-[640px] overflow-hidden bg-[#111111] text-[#F2F2F2] shadow-2xl ring-1 ring-white/5">
-        <section
-          className="relative w-full overflow-hidden"
-          style={{ aspectRatio: '640 / 820' }}
-          aria-labelledby="hero-title"
-        >
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 h-full w-full object-cover"
-            aria-hidden="true"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to bottom, rgba(17,17,17,0) 45%, rgba(17,17,17,0.45) 68%, rgba(17,17,17,0.9) 88%, rgba(17,17,17,1) 100%)',
-            }}
-            aria-hidden="true"
-          />
-
-          <div className="relative z-10 flex h-full flex-col items-center px-6 pb-10 pt-12 text-center">
-            <div className="text-white">
-              <p
-                className="text-[28px] leading-[0.95] tracking-tight"
-                style={{ fontFamily: "'Instrument Serif', serif" }}
-              >
-                张龙煜
-              </p>
-              <p className="mt-1 text-[13px] font-medium tracking-[0.22em]">AIGC</p>
-            </div>
-
-            <p className="mt-40 text-[13px] font-semibold tracking-[0.28em] text-white">
-              NOW AVAILABLE
-            </p>
-
-            <div className="flex-1" />
-
-            <h1
-              id="hero-title"
-              className="max-w-[560px] text-[58px] leading-[1.02] tracking-tight text-white"
-              style={{ fontFamily: "'Instrument Serif', serif" }}
-            >
-              Learn to lead AI
-              <br />
-              and unlock new value
-            </h1>
-            <a
-              href="#enroll"
-              className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#D8F90A] px-8 py-4 font-semibold text-[#1E1E1E] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#c9ea00] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            >
-              Enroll Now
-              <ArrowRight className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-            </a>
-          </div>
-        </section>
-
-        <section aria-label="Course introduction">
-          <div className="px-[78px] pb-8 pt-4 text-center max-sm:px-8">
-            <p className="text-[18px] leading-[1.55]">
-              Built in collaboration with Microsoft, this certificate course gives you the toolkit to
-              lead AI transformation across your organization. Learn to spot opportunities, launch AI
-              pilots, and scale adoption grounded in responsible practices and proven frameworks.
-            </p>
-          </div>
-          <div className="flex justify-center pb-14">
-            <PrimaryButton label="Get Started" href="#curriculum" />
-          </div>
-        </section>
-
-        <Divider />
-
-        <section id="curriculum" aria-labelledby="lead-heading">
-          <div className="px-9 pb-8">
-            <h2
-              id="lead-heading"
-              className="text-center text-[46px] leading-[1.05] tracking-tight"
-              style={{ fontFamily: "'Instrument Serif', serif" }}
-            >
-              Transform how you lead with AI
-            </h2>
-          </div>
-          <div className="px-[42px] pb-10 max-sm:px-6">
-            <VideoCard
-              label="Explore the AI leadership certificate"
-              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260419_065931_e3ca7b53-d32e-4ad5-81de-dc9d6fcfda6d.mp4"
-            />
-          </div>
-          <ol className="mx-auto max-w-[489px] px-[76px] pb-10 max-sm:px-8">
-            {lessons.map((lesson, index) => (
-              <Step key={lesson} number={index + 1}>
-                {lesson}
-              </Step>
-            ))}
-          </ol>
-          <div className="flex justify-center pb-14">
-            <SolidButton label="Enroll Now" />
-          </div>
-        </section>
-
-        <Divider />
-
-        <section aria-labelledby="roadmap-heading">
-          <div className="px-9 pb-7">
-            <h2
-              id="roadmap-heading"
-              className="text-center text-[46px] leading-[1.05] tracking-tight"
-              style={{ fontFamily: "'Instrument Serif', serif" }}
-            >
-              Build your AI
-              <br />
-              transformation roadmap
-            </h2>
-          </div>
-          <div className="px-[42px] pb-10 max-sm:px-6">
-            <VideoCard
-              label="Learn about the AI transformation roadmap"
-              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260417_110451_9f82b157-dc92-4a9f-a341-c25594ec20e1.mp4"
-            />
-          </div>
-          <div className="px-[78px] pb-8 text-center max-sm:px-8">
-            <p className="text-[18px] leading-[1.55]">
-              You&apos;ll finish this hands-on course with a personal AI Transformation Plan: your
-              playbook for pilot proposals, data strategy and governance. Use it to help secure buy-in,
-              guide rollout, and scale adoption responsibly.
-            </p>
-          </div>
-          <div className="flex justify-center pb-14">
-            <SolidButton label="Learn More" href="#curriculum" />
-          </div>
-        </section>
-
-        <section id="enroll" className="px-14 pb-12 max-sm:px-6" aria-labelledby="enroll-heading">
-          <div className="rounded-[10px] bg-[#D8F90A] px-8 py-12 text-center">
-            <h2
-              id="enroll-heading"
-              className="mb-3 text-[52px] leading-[1.02] tracking-tight text-[#1E1E1E]"
-              style={{ fontFamily: "'Instrument Serif', serif" }}
-            >
-              Ready to lead AI
-              <br />
-              at work?
-            </h2>
-            <p className="mb-8 px-4 text-[18px] leading-[1.5] text-[#1E1E1E]">
-              Enroll now and be the leader your team has been waiting for.
-            </p>
-            <div className="flex justify-center">
-              <PrimaryButton label="Enroll Now" href="mailto:hello@designrocket.com?subject=Design%20Rocket%20Certificates" />
-            </div>
-          </div>
-        </section>
-
-        <footer className="border-t border-white/5 bg-[#080808] px-10 pt-12 text-center text-white max-sm:px-6">
-          <div className="flex justify-center pb-8">
-            <a
-              href="#hero-title"
-              className="text-[30px] font-bold tracking-tight text-white transition-colors hover:text-[#DCFF00]"
-            >
-              Design Rocket
-            </a>
-          </div>
-          <p className="pb-8 text-[12px] leading-[1.5] text-[#83837D]">
-            Microsoft is a collaborator on this specific course. Microsoft does not endorse
-            <br className="max-sm:hidden" /> Design Rocket generally or other Design Rocket products.
-          </p>
-          <div className="flex justify-center pb-8" aria-hidden="true">
-            <span className="h-px w-24 bg-white/20" />
-          </div>
-          <div className="flex justify-center gap-5 pb-5 max-sm:gap-2.5">
-            {socials.map(({ label, Icon }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 transition-colors hover:border-white hover:bg-white hover:text-[#1E1E1E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCFF00]"
-              >
-                <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-          <p className="pb-4 text-[10px] leading-[1.6] text-[#83837D]">
-            If you no longer want to receive updates on Design Rocket Certificates,
-            <br className="max-sm:hidden" /> you can unsubscribe at any time by clicking
-            &quot;unsubscribe&quot; below.
-          </p>
-          <nav className="space-x-2 pb-3 text-[12px]" aria-label="Footer links">
-            {['Support', 'Privacy', 'Terms', 'Unsubscribe'].map((label, index) => (
-              <span key={label}>
-                {index > 0 && <span className="mr-2 text-[#8F8E88]">|</span>}
-                <a href="#" className="hover:underline">
-                  {label}
-                </a>
-              </span>
-            ))}
-          </nav>
-          <a href="#" className="inline-block text-[12px] text-white/80 hover:text-white">
-            ©2026 Design Rocket, 660 4th Street #443, San Francisco, CA 94107 USA
-          </a>
-          <div className="pb-10" />
-        </footer>
-      </article>
+    <main className="min-h-screen overflow-x-clip bg-[#0C0C0C]">
+      <HeroSection />
+      <MarqueeSection />
+      <AboutSection />
+      <ServicesSection />
+      <ProjectsSection />
     </main>
   );
 }
