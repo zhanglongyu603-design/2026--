@@ -12,8 +12,7 @@ import {
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-const portrait =
-  'https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png';
+const portrait = '/zhanglongyu-avatar.png';
 
 const marqueeImages = [
   'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
@@ -250,7 +249,7 @@ function HeroSection() {
           <Magnet>
             <img
               src={portrait}
-              alt="Jack, 3D creator"
+              alt="ZHANGLONGYU, 3D creator"
               className="block h-auto w-full select-none"
               draggable={false}
             />
