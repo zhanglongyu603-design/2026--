@@ -120,8 +120,10 @@ const projects: Project[] = [
     ],
   },
   {
-    name: 'Aura Brand Identity',
+    name: 'Midea Garment Steamer',
     category: 'Personal',
+    video: '/midea-garment-steamer-commercial.mp4',
+    poster: '/midea-garment-steamer-commercial-poster.jpg',
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85',
