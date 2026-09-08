@@ -208,7 +208,7 @@ function HeroSection() {
         </nav>
       </FadeIn>
 
-      <FadeIn delay={0.15} y={40} className="hero-title-wrap relative z-0 mt-8 overflow-visible sm:mt-6 md:mt-3">
+      <FadeIn delay={0.15} y={40} className="hero-title-wrap absolute inset-x-0 z-20 overflow-visible">
         <h1
           id="hero-heading"
           className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
@@ -220,8 +220,8 @@ function HeroSection() {
 
       <FadeIn
         delay={0.6}
-        y={30}
-        className="hero-video-wrap relative z-10 mx-auto mt-4 flex min-h-0 w-full flex-1 items-center justify-center px-6 sm:mt-5 md:px-10"
+        y={0}
+        className="hero-video-wrap pointer-events-none absolute inset-0 z-0"
       >
         <video
           className="hero-video"
@@ -231,7 +231,7 @@ function HeroSection() {
           playsInline
           preload="auto"
           poster="/hero-intro-poster.jpg"
-          aria-label="ZHANGLONGYU introduction video"
+          aria-hidden="true"
         >
           <source src="/hero-intro.mp4" type="video/mp4" />
         </video>
