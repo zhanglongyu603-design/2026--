@@ -218,11 +218,11 @@ function Magnet({ children }: { children: ReactNode }) {
 
 function HeroSection() {
   return (
-    <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip" aria-labelledby="hero-heading">
+    <section className="hero-panel relative flex h-screen min-h-[620px] flex-col overflow-x-clip" aria-labelledby="hero-heading">
       <FadeIn y={-20}>
         <nav
           aria-label="Primary navigation"
-          className="relative z-30 flex justify-between px-6 pt-6 text-sm font-medium uppercase tracking-wider text-[#D7E2EA] md:px-10 md:pt-8 md:text-lg lg:text-[1.4rem]"
+          className="relative z-30 flex justify-between px-6 pt-6 text-sm font-semibold uppercase tracking-wider text-[#151515] md:px-10 md:pt-8 md:text-lg lg:text-[1.15rem]"
         >
           <a className="nav-link" href="#about">About</a>
           <a className="nav-link" href="#services">Price</a>
@@ -231,12 +231,13 @@ function HeroSection() {
         </nav>
       </FadeIn>
 
-      <FadeIn delay={0.15} y={40} className="relative z-0 mt-6 overflow-hidden sm:mt-4 md:-mt-5">
+      <FadeIn delay={0.15} y={40} className="hero-title-wrap relative z-0 mt-8 overflow-visible sm:mt-6 md:mt-3">
         <h1
           id="hero-heading"
-          className="hero-heading w-full whitespace-nowrap text-center text-[8vw] font-black leading-none tracking-tight uppercase sm:text-[8.8vw] md:text-[9.2vw] lg:text-[9.8vw]"
+          className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
         >
-          Hi, i&apos;m ZHANGLONGYU
+          <span className="hero-intro">Hi, i&apos;m</span>
+          <span className="hero-name">ZHANGLONGYU</span>
         </h1>
       </FadeIn>
 
@@ -259,7 +260,7 @@ function HeroSection() {
 
       <div className="relative z-20 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn delay={0.35} y={20}>
-          <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-light leading-snug tracking-wide text-[#D7E2EA] uppercase sm:max-w-[220px] md:max-w-[260px]">
+          <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-medium leading-snug tracking-wide text-[#151515] uppercase sm:max-w-[220px] md:max-w-[260px]">
             A 3D creator driven by crafting striking and unforgettable projects
           </p>
         </FadeIn>
@@ -315,7 +316,7 @@ function MarqueeRow({ images, direction }: { images: string[]; direction: 'left'
             src={src}
             alt=""
             loading="lazy"
-            className="h-[270px] w-[420px] shrink-0 rounded-2xl object-cover"
+            className="marquee-tile h-[270px] w-[420px] shrink-0 object-cover"
           />
         ))}
       </div>
@@ -325,7 +326,7 @@ function MarqueeRow({ images, direction }: { images: string[]; direction: 'left'
 
 function MarqueeSection() {
   return (
-    <section className="overflow-hidden bg-[#0C0C0C] pt-24 pb-10 sm:pt-32 md:pt-40" aria-label="Selected motion work">
+    <section className="marquee-panel overflow-hidden bg-white pt-24 pb-10 sm:pt-32 md:pt-40" aria-label="Selected motion work">
       <div className="flex flex-col gap-3">
         <MarqueeRow images={marqueeImages.slice(0, 11)} direction="right" />
         <MarqueeRow images={marqueeImages.slice(11)} direction="left" />
@@ -380,7 +381,7 @@ function AboutSection() {
   return (
     <section
       id="about"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10"
+      className="about-panel relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10"
       aria-labelledby="about-heading"
     >
       {aboutObjects.map((object) => (
@@ -418,12 +419,12 @@ function ServicesSection() {
   return (
     <section
       id="services"
-      className="rounded-t-[40px] bg-white px-5 py-20 text-[#0C0C0C] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
+      className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
       aria-labelledby="services-heading"
     >
       <h2
         id="services-heading"
-        className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20 md:mb-28"
+        className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
       >
         Services
       </h2>
@@ -431,11 +432,11 @@ function ServicesSection() {
         {services.map((service, index) => (
           <FadeIn key={service.name} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
             <div className="grid grid-cols-[0.32fr_0.68fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
-              <span className="text-[clamp(3rem,10vw,140px)] font-black leading-none">
+              <span className="service-number text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <div>
-                <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-medium uppercase">{service.name}</h3>
+                <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-bold uppercase">{service.name}</h3>
                 <p className="mt-3 max-w-2xl text-[clamp(0.85rem,1.6vw,1.25rem)] font-light leading-relaxed opacity-60">
                   {service.description}
                 </p>
@@ -452,7 +453,7 @@ function LiveProjectButton() {
   return (
     <a
       href="#contact"
-      className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-8 py-3 text-sm font-medium tracking-widest text-[#D7E2EA] uppercase transition-colors hover:bg-[#D7E2EA]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D7E2EA] sm:px-10 sm:py-3.5 sm:text-base"
+      className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#F06FB6] px-8 py-3 text-sm font-semibold tracking-widest text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:px-10 sm:py-3.5 sm:text-base"
     >
       Live Project
       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -472,11 +473,11 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
     <div ref={container} className="relative h-[85vh] min-h-[620px]">
       <motion.article
         style={{ ...cardStyle, scale }}
-        className="project-card sticky overflow-hidden rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 text-[#D7E2EA] sm:rounded-[50px] sm:p-6 md:rounded-[60px] md:p-8"
+        className="project-card sticky overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8"
         aria-labelledby={`project-${index}`}
       >
         <div className="mb-5 grid grid-cols-[auto_1fr] items-end gap-x-5 gap-y-4 sm:mb-6 md:grid-cols-[auto_0.45fr_1fr_auto] md:gap-x-8">
-          <span className="text-[clamp(3rem,8vw,120px)] font-black leading-[0.75]">
+          <span className="project-number text-[clamp(3rem,8vw,120px)] font-black leading-[0.75] text-[#F06FB6]">
             {String(index + 1).padStart(2, '0')}
           </span>
           <p className="self-center text-sm font-light tracking-[0.18em] uppercase opacity-60 sm:text-base">
@@ -484,7 +485,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
           </p>
           <h3
             id={`project-${index}`}
-            className="col-span-2 text-[clamp(1.4rem,3vw,3.5rem)] font-medium leading-none uppercase md:col-span-1"
+            className="col-span-2 text-[clamp(1.4rem,3vw,3.5rem)] font-semibold leading-none text-[#F06FB6] uppercase md:col-span-1"
           >
             {project.name}
           </h3>
@@ -499,20 +500,20 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
               src={project.images[0]}
               alt={`${project.name} detail view`}
               loading="lazy"
-              className="h-[clamp(130px,16vw,230px)] w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+              className="h-[clamp(130px,16vw,230px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
             />
             <img
               src={project.images[1]}
               alt={`${project.name} material study`}
               loading="lazy"
-              className="h-[clamp(160px,22vw,340px)] w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+              className="h-[clamp(160px,22vw,340px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
             />
           </div>
           <img
             src={project.images[2]}
             alt={`${project.name} hero artwork`}
             loading="lazy"
-            className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[60px]"
+            className="h-full min-h-0 w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
           />
         </div>
       </motion.article>
@@ -524,7 +525,7 @@ function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] px-5 pt-20 pb-32 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
+      className="projects-panel relative z-10 -mt-10 rounded-t-[40px] bg-[#171717] px-5 pt-20 pb-32 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
       aria-labelledby="projects-heading"
     >
       <FadeIn y={40}>
@@ -543,9 +544,9 @@ function ProjectsSection() {
       </div>
 
       <footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center sm:pt-24">
-        <p className="text-sm font-medium tracking-[0.28em] text-[#D7E2EA]/60 uppercase">Available for selected projects</p>
+        <p className="text-sm font-medium tracking-[0.28em] text-[#F8F5F2]/60 uppercase">Available for selected projects</p>
         <ContactButton />
-        <p className="text-sm text-[#D7E2EA]/40">© 2026 Jack — 3D Creator</p>
+        <p className="text-sm text-[#F8F5F2]/40">© 2026 Jack — 3D Creator</p>
       </footer>
     </section>
   );
@@ -553,7 +554,7 @@ function ProjectsSection() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0C0C0C]">
+    <main className="site-shell min-h-screen overflow-x-clip bg-[#F3A7D2]">
       <HeroSection />
       <MarqueeSection />
       <AboutSection />
