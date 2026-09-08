@@ -141,6 +141,13 @@ const projects: Project[] = [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055818_9d062121-ad7e-46b9-999a-1a6a692ef1ee.png&w=1280&q=85',
     ],
   },
+  {
+    name: 'Douyin Video',
+    category: 'Personal',
+    video: '/douyin-video.mp4',
+    poster: '/douyin-video-poster.jpg',
+    images: [],
+  },
 ];
 
 type FadeInProps = {
@@ -478,7 +485,7 @@ function LiveProjectButton() {
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const container = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
-  const targetScale = 1 - (projects.length - 1) * 0.03;
+  const targetScale = 0.94;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
