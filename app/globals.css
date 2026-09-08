@@ -135,7 +135,7 @@ img {
 .hero-title-line {
   display: block;
   font-size: clamp(3.25rem, 10.2vw, 9.5rem);
-  letter-spacing: -0.035em;
+  letter-spacing: -0.015em;
 }
 
 .hero-title-name {
