@@ -6,13 +6,10 @@ import {
   useState,
   type CSSProperties,
   type ElementType,
-  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-
-const portrait = '/zhanglongyu-avatar-transparent.png';
 
 const marqueeImages = [
   'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
@@ -196,47 +193,6 @@ function ContactButton({ className = '' }: { className?: string }) {
   );
 }
 
-function Magnet({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState('translate3d(0, 0, 0)');
-  const [active, setActive] = useState(false);
-
-  const updatePosition = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const bounds = ref.current.getBoundingClientRect();
-    const centerX = bounds.left + bounds.width / 2;
-    const centerY = bounds.top + bounds.height / 2;
-    const distanceX = event.clientX - centerX;
-    const distanceY = event.clientY - centerY;
-    const withinPadding =
-      Math.abs(distanceX) <= bounds.width / 2 + 150 &&
-      Math.abs(distanceY) <= bounds.height / 2 + 150;
-
-    if (withinPadding) {
-      setActive(true);
-      setTransform(`translate3d(${distanceX / 3}px, ${distanceY / 3}px, 0)`);
-    }
-  };
-
-  return (
-    <div
-      ref={ref}
-      onMouseMove={updatePosition}
-      onMouseLeave={() => {
-        setActive(false);
-        setTransform('translate3d(0, 0, 0)');
-      }}
-      style={{
-        transform,
-        transition: active ? 'transform 0.3s ease-out' : 'transform 0.6s ease-in-out',
-        willChange: 'transform',
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
 function HeroSection() {
   return (
     <section className="hero-panel relative flex h-screen min-h-[620px] flex-col overflow-x-clip" aria-labelledby="hero-heading">
@@ -265,18 +221,20 @@ function HeroSection() {
       <FadeIn
         delay={0.6}
         y={30}
-        className="pointer-events-none absolute top-1/2 left-1/2 z-10 w-[280px] -translate-x-1/2 -translate-y-1/2 sm:top-auto sm:bottom-0 sm:w-[360px] sm:translate-y-0 md:w-[440px] lg:w-[520px]"
+        className="hero-video-wrap relative z-10 mx-auto mt-4 flex min-h-0 w-full flex-1 items-center justify-center px-6 sm:mt-5 md:px-10"
       >
-        <div className="pointer-events-auto">
-          <Magnet>
-            <img
-              src={portrait}
-              alt="ZHANGLONGYU, 3D creator"
-              className="block h-auto w-full select-none"
-              draggable={false}
-            />
-          </Magnet>
-        </div>
+        <video
+          className="hero-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/hero-intro-poster.jpg"
+          aria-label="ZHANGLONGYU introduction video"
+        >
+          <source src="/hero-intro.mp4" type="video/mp4" />
+        </video>
       </FadeIn>
 
       <div className="relative z-20 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
