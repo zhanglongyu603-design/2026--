@@ -235,9 +235,9 @@ function HeroSection() {
       <FadeIn delay={0.15} y={40} className="relative z-0 mt-6 overflow-hidden sm:mt-4 md:-mt-5">
         <h1
           id="hero-heading"
-          className="hero-heading w-full whitespace-nowrap text-center text-[14vw] font-black leading-none tracking-tight uppercase sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw]"
+          className="hero-heading w-full whitespace-nowrap text-center text-[8vw] font-black leading-none tracking-tight uppercase sm:text-[8.8vw] md:text-[9.2vw] lg:text-[9.8vw]"
         >
-          Hi, i&apos;m jack
+          Hi, i&apos;m ZHANGLONGYU
         </h1>
       </FadeIn>
 
