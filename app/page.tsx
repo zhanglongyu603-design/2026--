@@ -211,19 +211,11 @@ function HeroSection() {
       <div className="hero-title-wrap absolute inset-x-0 z-20 overflow-visible">
         <h1
           id="hero-heading"
-          className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
+          className="hero-title font-black uppercase"
         >
-          <span className="hero-name" aria-label="I'm ZHANGLONGYU">
-            {"I'MZHANGLONGYU".split('').map((letter, index) => (
-              <span
-                key={`${letter}-${index}`}
-                className={index === 2 ? 'hero-word-end' : undefined}
-                aria-hidden="true"
-              >
-                {letter}
-              </span>
-            ))}
-          </span>
+          <span className="hero-title-line">Hello</span>
+          <span className="hero-title-line">I’m</span>
+          <span className="hero-title-line hero-title-name">Zhanglongyu</span>
         </h1>
       </div>
 
