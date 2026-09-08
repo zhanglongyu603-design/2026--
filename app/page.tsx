@@ -464,7 +464,7 @@ function LiveProjectButton() {
 function ProjectCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
   const container = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
-  const targetScale = 1 - (projects.length - 1 - index) * 0.03;
+  const targetScale = 1 - (projects.length - 1) * 0.03;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
