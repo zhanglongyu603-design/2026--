@@ -108,21 +108,23 @@ img {
 }
 
 .hero-title-wrap {
-  top: clamp(7.5rem, 26vh, 16rem);
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  padding-inline: clamp(0.75rem, 2vw, 2rem);
+  padding-inline: clamp(0.25rem, 0.8vw, 0.75rem);
 }
 
 .hero-title {
   position: relative;
   display: block;
-  padding-top: clamp(1.4rem, 4vw, 4.25rem);
+  padding-top: 0;
 }
 
 .hero-intro {
   position: absolute;
   z-index: 2;
-  top: 0;
+  top: -0.78em;
   left: clamp(1.5rem, 7vw, 7rem);
   color: #151515;
   font-family: var(--font-script);
@@ -135,10 +137,18 @@ img {
 }
 
 .hero-name {
-  display: block;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
   white-space: nowrap;
-  font-size: clamp(3.35rem, 10.7vw, 10.5rem);
-  letter-spacing: -0.035em;
+  font-size: clamp(3.25rem, 14.5vw, 13.75rem);
+  line-height: 0.76;
+  letter-spacing: 0;
+}
+
+.hero-footer {
+  margin-bottom: clamp(4.75rem, 12.5vw, 11.75rem);
 }
 
 .hero-video-wrap {
@@ -321,14 +331,14 @@ img {
     left: 1rem;
   }
 
-  .hero-title-wrap {
-    top: clamp(6.5rem, 23vh, 10rem);
-  }
-
   .hero-video {
     width: 100%;
     height: 100%;
     max-height: none;
+  }
+
+  .hero-footer {
+    margin-bottom: clamp(4.25rem, 16vw, 6rem);
   }
 
   .marquee-viewport {

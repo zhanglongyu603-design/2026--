@@ -214,7 +214,13 @@ function HeroSection() {
           className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
         >
           <span className="hero-intro">Hi, i&apos;m</span>
-          <span className="hero-name">ZHANGLONGYU</span>
+          <span className="hero-name" aria-label="ZHANGLONGYU">
+            {'ZHANGLONGYU'.split('').map((letter, index) => (
+              <span key={`${letter}-${index}`} aria-hidden="true">
+                {letter}
+              </span>
+            ))}
+          </span>
         </h1>
       </FadeIn>
 
@@ -237,7 +243,7 @@ function HeroSection() {
         </video>
       </FadeIn>
 
-      <div className="relative z-20 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
+      <div className="hero-footer relative z-30 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn delay={0.35} y={20}>
           <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-medium leading-snug tracking-wide text-[#151515] uppercase sm:max-w-[220px] md:max-w-[260px]">
             A 3D creator driven by crafting striking and unforgettable projects
