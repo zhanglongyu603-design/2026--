@@ -188,8 +188,18 @@ img {
   box-shadow: 8px 8px 0 #f06fb6;
 }
 
-.project-card img {
+.project-card img,
+.project-card video {
   border: 1px solid rgb(255 253 250 / 70%);
+}
+
+.project-video {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 42vw, 580px);
+  border-radius: 20px;
+  background: #050505;
+  object-fit: contain;
 }
 
 .nav-link {
@@ -278,6 +288,12 @@ img {
 
   .hero-panel {
     height: calc(100svh - 16px) !important;
+  }
+
+  .project-video {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
   }
 
   .hero-panel nav {

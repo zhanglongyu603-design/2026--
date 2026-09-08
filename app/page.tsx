@@ -99,10 +99,20 @@ const services = [
   },
 ];
 
-const projects = [
+type Project = {
+  name: string;
+  category: string;
+  images: string[];
+  video?: string;
+  poster?: string;
+};
+
+const projects: Project[] = [
   {
-    name: 'Nextlevel Studio',
-    category: 'Client',
+    name: 'TVC Advertising',
+    category: 'Personal',
+    video: '/tvc-advertisement.mp4',
+    poster: '/tvc-advertisement-poster.jpg',
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85',
@@ -461,7 +471,7 @@ function LiveProjectButton() {
   );
 }
 
-function ProjectCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const container = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
   const targetScale = 1 - (projects.length - 1) * 0.03;
@@ -494,28 +504,42 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
           </div>
         </div>
 
-        <div className="grid grid-cols-[0.4fr_0.6fr] gap-3">
-          <div className="grid gap-3">
+        {project.video ? (
+          <video
+            className="project-video"
+            controls
+            playsInline
+            preload="metadata"
+            poster={project.poster}
+            aria-label={`${project.name} video`}
+          >
+            <source src={project.video} type="video/mp4" />
+            Your browser does not support video playback.
+          </video>
+        ) : (
+          <div className="grid grid-cols-[0.4fr_0.6fr] gap-3">
+            <div className="grid gap-3">
+              <img
+                src={project.images[0]}
+                alt={`${project.name} detail view`}
+                loading="lazy"
+                className="h-[clamp(130px,16vw,230px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
+              />
+              <img
+                src={project.images[1]}
+                alt={`${project.name} material study`}
+                loading="lazy"
+                className="h-[clamp(160px,22vw,340px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
+              />
+            </div>
             <img
-              src={project.images[0]}
-              alt={`${project.name} detail view`}
+              src={project.images[2]}
+              alt={`${project.name} hero artwork`}
               loading="lazy"
-              className="h-[clamp(130px,16vw,230px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
-            />
-            <img
-              src={project.images[1]}
-              alt={`${project.name} material study`}
-              loading="lazy"
-              className="h-[clamp(160px,22vw,340px)] w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
+              className="h-full min-h-0 w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
             />
           </div>
-          <img
-            src={project.images[2]}
-            alt={`${project.name} hero artwork`}
-            loading="lazy"
-            className="h-full min-h-0 w-full rounded-[12px] object-cover sm:rounded-[16px] md:rounded-[20px]"
-          />
-        </div>
+        )}
       </motion.article>
     </div>
   );
