@@ -213,10 +213,13 @@ function HeroSection() {
           id="hero-heading"
           className="hero-heading hero-title w-full text-center font-black leading-none tracking-tight uppercase"
         >
-          <span className="hero-intro">Hi, i&apos;m</span>
-          <span className="hero-name" aria-label="ZHANGLONGYU">
-            {'ZHANGLONGYU'.split('').map((letter, index) => (
-              <span key={`${letter}-${index}`} aria-hidden="true">
+          <span className="hero-name" aria-label="I'm ZHANGLONGYU">
+            {"I'MZHANGLONGYU".split('').map((letter, index) => (
+              <span
+                key={`${letter}-${index}`}
+                className={index === 2 ? 'hero-word-end' : undefined}
+                aria-hidden="true"
+              >
                 {letter}
               </span>
             ))}
