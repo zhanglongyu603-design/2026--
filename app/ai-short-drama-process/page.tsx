@@ -54,15 +54,29 @@ export default function AiShortDramaProcessPage() {
                 <span className="text-[#F06FB6]">{page.number}</span>
                 <span className="h-px flex-1 bg-white/15" />
               </figcaption>
-              <img
-                src={`/ai-short-drama-process/page-${index + 1}.jpg`}
-                alt={page.alt}
-                width={1920}
-                height={1080}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-                className="block h-auto w-full border border-white/15 bg-white"
-              />
+              <div className="relative">
+                <img
+                  src={`/ai-short-drama-process/page-${index + 1}.jpg`}
+                  alt={page.alt}
+                  width={1920}
+                  height={1080}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  className="block h-auto w-full border border-white/15 bg-white"
+                />
+                {index === 0 ? (
+                  <a
+                    href="https://acnd2cprlmfq.feishu.cn/wiki/BDMAww7SHiKuy7kOIqYcgz83ntb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="打开飞书项目链接（新标签页）"
+                    title="打开飞书链接"
+                    className="absolute top-[18.25%] left-[3.9%] h-[6.6%] w-[14.95%] cursor-pointer rounded-full transition-all hover:bg-white/10 hover:ring-4 hover:ring-[#F06FB6]/70 focus-visible:bg-white/10 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6]"
+                  >
+                    <span className="sr-only">打开飞书链接</span>
+                  </a>
+                ) : null}
+              </div>
             </figure>
           ))}
         </div>
