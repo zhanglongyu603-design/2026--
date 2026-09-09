@@ -23,7 +23,7 @@ export default function AiShortDramaProcessPage() {
       <header className="sticky top-0 z-20 border-b border-white/15 bg-[#171717]/95 backdrop-blur-md">
         <div className="mx-auto grid w-[min(calc(100%_-_32px),1600px)] grid-cols-[1fr_auto] items-center gap-4 py-4 sm:grid-cols-[1fr_auto_1fr] sm:py-5">
           <a
-            href="/"
+            href="/#project-card-03"
             className="inline-flex w-fit items-center gap-2 text-xs font-semibold tracking-[0.12em] uppercase transition-colors hover:text-[#F06FB6] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:text-sm"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
@@ -69,16 +69,20 @@ export default function AiShortDramaProcessPage() {
       </section>
 
       <footer className="border-t border-white/15 py-8 sm:py-10">
-        <div className="mx-auto flex w-[min(calc(100%_-_32px),1600px)] items-center justify-between gap-6">
-          <a className="text-sm font-semibold transition-colors hover:text-[#F06FB6]" href="/">
-            ← 返回作品集
+        <div className="mx-auto flex w-[min(calc(100%_-_32px),1600px)] flex-col items-stretch justify-between gap-5 sm:flex-row sm:items-center">
+          <a
+            className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full border-2 border-[#F06FB6] bg-[#F06FB6] px-6 text-base font-bold text-[#171717] shadow-[4px_4px_0_#FFFDF8] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:min-h-16 sm:w-auto sm:px-10 sm:text-xl"
+            href="/#project-card-03"
+          >
+            <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
+            返回作品集
           </a>
           <a
             href="#top"
-            className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#F06FB6]"
+            className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full border-2 border-[#FFFDF8] px-6 text-base font-bold text-[#FFFDF8] transition-colors hover:border-[#F06FB6] hover:bg-[#F06FB6] hover:text-[#171717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:min-h-16 sm:w-auto sm:px-10 sm:text-xl"
           >
             回到顶部
-            <ArrowUp className="h-4 w-4" aria-hidden="true" />
+            <ArrowUp className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
           </a>
         </div>
       </footer>

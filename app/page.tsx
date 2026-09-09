@@ -433,14 +433,26 @@ function ServicesSection() {
   );
 }
 
-function LiveProjectButton({ href = '#contact', label = 'Live Project' }: { href?: string; label?: string }) {
+function LiveProjectButton({
+  href = '#contact',
+  label = 'Live Project',
+  prominent = false,
+}: {
+  href?: string;
+  label?: string;
+  prominent?: boolean;
+}) {
   return (
     <a
       href={href}
-      className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#F06FB6] px-8 py-3 text-sm font-semibold tracking-widest text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:px-10 sm:py-3.5 sm:text-base"
+      className={`inline-flex shrink-0 items-center rounded-full border-2 border-[#F06FB6] font-semibold text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] ${
+        prominent
+          ? 'gap-3 px-8 py-4 text-lg tracking-[0.08em] sm:px-12 sm:py-5 sm:text-2xl'
+          : 'gap-2 px-8 py-3 text-sm tracking-widest sm:px-10 sm:py-3.5 sm:text-base'
+      }`}
     >
       {label}
-      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+      <ArrowUpRight className={prominent ? 'h-6 w-6 sm:h-7 sm:w-7' : 'h-4 w-4'} aria-hidden="true" />
     </a>
   );
 }
@@ -454,7 +466,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
 
   return (
-    <div ref={container} className="relative h-[85vh] min-h-[620px]">
+    <div
+      ref={container}
+      id={`project-card-${String(index + 1).padStart(2, '0')}`}
+      className="relative h-[85vh] min-h-[620px] scroll-mt-4"
+    >
       <motion.article
         style={{ ...cardStyle, scale }}
         className="project-card sticky overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8"
@@ -474,7 +490,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.name}
           </h3>
           <div className="col-span-2 md:col-span-1">
-            <LiveProjectButton href={project.actionHref} label={project.actionLabel} />
+            <LiveProjectButton
+              href={project.actionHref}
+              label={project.actionLabel}
+              prominent={project.name === 'AI Short Drama'}
+            />
           </div>
         </div>
 
