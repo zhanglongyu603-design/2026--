@@ -414,20 +414,23 @@ function ServicesSection() {
       className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
       aria-labelledby="contents-heading"
     >
-      <h2
-        id="contents-heading"
-        className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
-      >
-        Contents
-      </h2>
-      <ol className="mx-auto max-w-5xl border-t border-[rgba(12,12,12,0.15)]">
+      <div className="mx-auto mb-16 grid max-w-6xl grid-cols-[0.28fr_0.72fr] items-end gap-5 sm:mb-20 sm:gap-10 md:mb-28">
+        <span aria-hidden="true" />
+        <h2
+          id="contents-heading"
+          className="editorial-heading text-left text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase"
+        >
+          Contents
+        </h2>
+      </div>
+      <ol className="mx-auto max-w-6xl border-t border-[rgba(12,12,12,0.15)]">
         {contents.map((title, index) => (
           <FadeIn key={title} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
-            <div className="grid grid-cols-[0.32fr_0.68fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
-              <span className="service-number pl-3 text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6] sm:pl-6 md:pl-10">
+            <div className="grid grid-cols-[0.28fr_0.72fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
+              <span className="service-number text-center text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-bold">{title}</h3>
+              <h3 className="text-left text-[clamp(1rem,2.2vw,2.1rem)] font-bold">{title}</h3>
             </div>
           </FadeIn>
         ))}
