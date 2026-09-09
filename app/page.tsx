@@ -35,32 +35,12 @@ const marqueeImages = [
   'https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif',
 ];
 
-const services = [
-  {
-    name: '3D Modeling',
-    description:
-      'Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.',
-  },
-  {
-    name: 'Rendering',
-    description:
-      'High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.',
-  },
-  {
-    name: 'Motion Design',
-    description:
-      'Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.',
-  },
-  {
-    name: 'Branding',
-    description:
-      'Crafting cohesive visual identities—from logos to full brand systems—that communicate a clear and memorable presence.',
-  },
-  {
-    name: 'Web Design',
-    description:
-      'Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.',
-  },
+const contents = [
+  'TVC香水广告',
+  '电商广告——美的手持挂烫机',
+  'AI短剧——失忆后，我的死对头超会演',
+  '自媒体——仿喜鹊谋杀案剪辑',
+  '数字人训练',
 ];
 
 type Project = {
@@ -432,27 +412,22 @@ function ServicesSection() {
     <section
       id="services"
       className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
-      aria-labelledby="services-heading"
+      aria-labelledby="contents-heading"
     >
       <h2
-        id="services-heading"
+        id="contents-heading"
         className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
       >
-        Services
+        Contents
       </h2>
       <ol className="mx-auto max-w-5xl border-t border-[rgba(12,12,12,0.15)]">
-        {services.map((service, index) => (
-          <FadeIn key={service.name} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
+        {contents.map((title, index) => (
+          <FadeIn key={title} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
             <div className="grid grid-cols-[0.32fr_0.68fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
               <span className="service-number text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <div>
-                <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-bold uppercase">{service.name}</h3>
-                <p className="mt-3 max-w-2xl text-[clamp(0.85rem,1.6vw,1.25rem)] font-light leading-relaxed opacity-60">
-                  {service.description}
-                </p>
-              </div>
+              <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-bold">{title}</h3>
             </div>
           </FadeIn>
         ))}
