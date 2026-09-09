@@ -17,11 +17,19 @@ const pages = [
   { number: '08', alt: '从粗剪、精剪到字幕、音效与配乐的剪辑流程' },
 ];
 
+const centeredPageWidth = {
+  width: 'min(calc(100% - 32px), 1600px)',
+  marginInline: 'auto',
+} as const;
+
 export default function AiShortDramaProcessPage() {
   return (
     <main id="top" className="min-h-screen bg-[#171717] text-[#FFFDF8]">
       <header className="sticky top-0 z-20 border-b border-white/15 bg-[#171717]/95 backdrop-blur-md">
-        <div className="mx-auto grid w-[min(calc(100%_-_32px),1600px)] grid-cols-[1fr_auto] items-center gap-4 py-4 sm:grid-cols-[1fr_auto_1fr] sm:py-5">
+        <div
+          className="grid grid-cols-[1fr_auto] items-center gap-4 py-4 sm:grid-cols-[1fr_auto_1fr] sm:py-5"
+          style={centeredPageWidth}
+        >
           <a
             href="/#project-card-03"
             className="inline-flex w-fit items-center gap-2 text-xs font-semibold tracking-[0.12em] uppercase transition-colors hover:text-[#F06FB6] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:text-sm"
@@ -36,7 +44,7 @@ export default function AiShortDramaProcessPage() {
         </div>
       </header>
 
-      <section className="mx-auto w-[min(calc(100%_-_32px),1600px)] py-6 sm:py-10" aria-label="AI 短剧制作过程">
+      <section className="py-6 sm:py-10" style={centeredPageWidth} aria-label="AI 短剧制作过程">
         <div className="mb-7 flex items-end justify-between gap-6 sm:mb-10">
           <div>
             <p className="mb-2 text-xs font-medium tracking-[0.18em] text-[#F06FB6] uppercase sm:text-sm">Project 03</p>
@@ -83,7 +91,10 @@ export default function AiShortDramaProcessPage() {
       </section>
 
       <footer className="border-t border-white/15 py-8 sm:py-10">
-        <div className="mx-auto flex w-[min(calc(100%_-_32px),1600px)] flex-col items-stretch justify-between gap-5 sm:flex-row sm:items-center">
+        <div
+          className="flex flex-col items-stretch justify-between gap-5 sm:flex-row sm:items-center"
+          style={centeredPageWidth}
+        >
           <a
             className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full border-2 border-[#F06FB6] bg-[#F06FB6] px-6 text-base font-bold text-[#171717] shadow-[4px_4px_0_#FFFDF8] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:min-h-16 sm:w-auto sm:px-10 sm:text-xl"
             href="/#project-card-03"
