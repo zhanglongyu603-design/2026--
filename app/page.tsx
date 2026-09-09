@@ -35,39 +35,6 @@ const marqueeImages = [
   'https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif',
 ];
 
-const aboutObjects = [
-  {
-    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png',
-    alt: 'Chrome moon sculpture',
-    className: 'top-[4%] left-[1%] w-[120px] sm:left-[2%] sm:w-[160px] md:left-[4%] md:w-[210px]',
-    delay: 0.1,
-    x: -80,
-  },
-  {
-    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png',
-    alt: 'Abstract chrome sculpture',
-    className:
-      'bottom-[8%] left-[3%] w-[100px] sm:left-[6%] sm:w-[140px] md:left-[10%] md:w-[180px]',
-    delay: 0.25,
-    x: -80,
-  },
-  {
-    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png',
-    alt: 'Glossy block sculpture',
-    className: 'top-[4%] right-[1%] w-[120px] sm:right-[2%] sm:w-[160px] md:right-[4%] md:w-[210px]',
-    delay: 0.15,
-    x: 80,
-  },
-  {
-    src: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png',
-    alt: 'Colorful 3D forms',
-    className:
-      'bottom-[8%] right-[3%] w-[130px] sm:right-[6%] sm:w-[170px] md:right-[10%] md:w-[220px]',
-    delay: 0.3,
-    x: 80,
-  },
-];
-
 const services = [
   {
     name: '3D Modeling',
@@ -319,80 +286,141 @@ function MarqueeSection() {
   );
 }
 
-function AnimatedCharacter({ character, progress, range }: { character: string; progress: ReturnType<typeof useScroll>['scrollYProgress']; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.2, 1]);
-
-  return (
-    <span className="relative inline-block" aria-hidden="true">
-      <span className="invisible">{character}</span>
-      <motion.span className="absolute inset-0" style={{ opacity }}>
-        {character}
-      </motion.span>
-    </span>
-  );
-}
-
-function AnimatedText({ children }: { children: string }) {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.2'] });
-
-  return (
-    <p
-      ref={ref}
-      className="relative max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
-      aria-label={children}
-    >
-      {children.split('').map((character, index) => {
-        const start = index / children.length;
-        const end = Math.min(1, start + 1 / children.length);
-        return (
-          <AnimatedCharacter
-            key={`${character}-${index}`}
-            character={character === ' ' ? '\u00A0' : character}
-            progress={scrollYProgress}
-            range={[start, end]}
-          />
-        );
-      })}
-    </p>
-  );
-}
-
 function AboutSection() {
-  const aboutCopy =
-    "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!";
+  const experience = [
+    {
+      company: '博拉网络有限公司',
+      role: '视觉设计师',
+      period: '2026.01–2026.04',
+      description:
+        '负责甲方品牌小红书账号的全链路视觉设计工作，输出契合品牌调性与平台生态的视觉解决方案。',
+    },
+    {
+      company: '武汉火花思维教育科技有限公司',
+      role: '视觉设计师',
+      period: '2025.06–2025.09',
+      description:
+        '核心参与线上视频课件的视觉设计，通过创意素材快速产出、细节优化与版式调整，平衡视觉吸引力与信息传达效率，保障课件视觉连贯性与知识呈现清晰度。',
+    },
+  ];
 
   return (
     <section
       id="about"
-      className="about-panel relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10"
+      className="about-panel about-profile relative min-h-screen overflow-hidden"
       aria-labelledby="about-heading"
     >
-      {aboutObjects.map((object) => (
-        <FadeIn
-          key={object.src}
-          delay={object.delay}
-          duration={0.9}
-          x={object.x}
-          y={0}
-          className={`pointer-events-none absolute z-0 ${object.className}`}
-        >
-          <img src={object.src} alt={object.alt} className="h-auto w-full" loading="lazy" />
-        </FadeIn>
-      ))}
+      <div className="about-wireframe pointer-events-none absolute inset-0" aria-hidden="true">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <g className="about-wire about-wire--one">
+            <ellipse cx="175" cy="455" rx="170" ry="448" />
+          </g>
+          <g className="about-wire about-wire--two">
+            <ellipse cx="540" cy="455" rx="245" ry="448" />
+          </g>
+          <g className="about-wire about-wire--three">
+            <ellipse cx="930" cy="455" rx="118" ry="448" />
+          </g>
+          <g className="about-wire about-wire--four">
+            <ellipse cx="1165" cy="455" rx="126" ry="448" />
+          </g>
+          <g className="about-wire about-wire--five">
+            <ellipse cx="1455" cy="455" rx="138" ry="448" />
+          </g>
+          <path className="about-axis" d="M44 265 H1556" />
+          <g className="about-perspective">
+            <path d="M565 265 L1600 168" />
+            <path d="M565 265 L1600 360" />
+            <path d="M565 265 L1600 265" />
+          </g>
+          <g className="about-gridlines">
+            {Array.from({ length: 12 }).map((_, index) => (
+              <path key={index} d={`M${720 + index * 42} ${225 - index * 2} V${305 + index * 2}`} />
+            ))}
+          </g>
+          <rect className="about-marker" x="555" y="261" width="18" height="8" rx="2" />
+        </svg>
+      </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-10 sm:gap-14 md:gap-16">
-        <FadeIn y={40}>
-          <h2
-            id="about-heading"
-            className="hero-heading text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase"
-          >
-            About me
-          </h2>
+      <div className="about-profile__content relative z-10">
+        <FadeIn y={-18} className="about-profile__masthead">
+          <div className="about-profile__heading">
+            <h2 id="about-heading">个人介绍</h2>
+            <p>INTRODUCE MYSELF</p>
+          </div>
+          <p className="about-profile__edition">PORTFOLIO / 2026</p>
+          <a className="about-profile__meta" href="tel:+8613997679986">
+            <span>PHONE</span>
+            +86 139 9767 9986
+          </a>
+          <a className="about-profile__meta" href="mailto:2942981556@qq.com">
+            <span>EMAIL</span>
+            2942981556@qq.com
+          </a>
         </FadeIn>
-        <div className="flex flex-col items-center gap-16 px-7 sm:gap-20 md:gap-24">
-          <AnimatedText>{aboutCopy}</AnimatedText>
-          <ContactButton />
+
+        <div className="about-profile__body">
+          <div className="about-profile__resume">
+            <FadeIn x={-28} y={0} className="about-profile__identity about-profile__row">
+              <p className="about-profile__label">关于我</p>
+              <div>
+                <p className="about-profile__name">张龙煜 <span>/ ZHANG LONGYU</span></p>
+                <dl className="about-profile__facts">
+                  <div><dt>性别</dt><dd>女</dd></div>
+                  <div><dt>年龄</dt><dd>22岁</dd></div>
+                  <div><dt>方向</dt><dd>AIGC·广告·视频制作·视觉设计</dd></div>
+                </dl>
+              </div>
+            </FadeIn>
+
+            <div className="about-profile__row about-profile__experience">
+              <p className="about-profile__label">工作经历</p>
+              <div className="about-profile__jobs">
+                {experience.map((job, index) => (
+                  <FadeIn key={job.company} delay={0.12 + index * 0.12} y={24} as="article" className="about-profile__job">
+                    <div className="about-profile__job-head">
+                      <h3>{job.company}</h3>
+                      <span>{job.period}</span>
+                    </div>
+                    <p className="about-profile__role">{job.role}</p>
+                    <p className="about-profile__description">{job.description}</p>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+
+            <FadeIn delay={0.22} y={24} className="about-profile__row about-profile__education">
+              <p className="about-profile__label">教育经历</p>
+              <div>
+                <div className="about-profile__job-head">
+                  <h3>武汉科技大学</h3>
+                  <span>2022–2026</span>
+                </div>
+                <p className="about-profile__role">视觉传达设计 · 本科</p>
+              </div>
+            </FadeIn>
+          </div>
+
+          <div className="about-profile__showcase">
+            <FadeIn x={36} y={0} className="about-profile__discipline">
+              <span>VISUAL DESIGNER</span>
+            </FadeIn>
+            <FadeIn delay={0.12} x={40} y={0}>
+              <p className="about-profile__display-name" aria-hidden="true">
+                ZHANG<br />LONGYU
+              </p>
+            </FadeIn>
+            <motion.figure
+              className="about-profile__portrait"
+              initial={{ opacity: 0.72, x: 24, scale: 0.985 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 1, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <img src="/about-zhanglongyu.jpg" alt="张龙煜个人照片" loading="eager" />
+              <figcaption>VISUAL COMMUNICATION / 2022–2026</figcaption>
+            </motion.figure>
+          </div>
         </div>
       </div>
     </section>

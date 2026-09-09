@@ -180,6 +180,361 @@ img {
   color: #fffdfa;
 }
 
+.about-profile {
+  min-height: max(860px, calc(100svh - 32px));
+  isolation: isolate;
+}
+
+.about-profile::before {
+  position: absolute;
+  right: -8%;
+  top: 18%;
+  z-index: -1;
+  width: 52%;
+  height: 38%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(240 111 182 / 13%) 0%, rgb(240 111 182 / 2%) 46%, transparent 72%);
+  content: '';
+  filter: blur(12px);
+}
+
+.about-wireframe {
+  z-index: -1;
+  opacity: 0.56;
+}
+
+.about-wireframe svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.about-wire,
+.about-axis,
+.about-perspective,
+.about-gridlines {
+  fill: none;
+  stroke: rgb(255 253 250 / 40%);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.about-wire {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: about-orbit-breathe 8s ease-in-out infinite;
+}
+
+.about-wire ellipse {
+  stroke-dasharray: 4 5;
+  animation: about-orbit-travel 16s linear infinite;
+}
+
+.about-wire--two {
+  animation-delay: -5.2s;
+  animation-duration: 10s;
+}
+
+.about-wire--three {
+  animation-delay: -2.4s;
+  animation-duration: 7s;
+}
+
+.about-wire--four {
+  animation-delay: -6.8s;
+  animation-duration: 9s;
+}
+
+.about-wire--five {
+  animation-delay: -3.7s;
+  animation-duration: 6.5s;
+}
+
+.about-perspective {
+  stroke: rgb(240 111 182 / 43%);
+}
+
+.about-gridlines {
+  stroke: rgb(255 253 250 / 30%);
+  stroke-dasharray: 3 4;
+}
+
+.about-marker {
+  fill: #f06fb6;
+  animation: about-marker-glide 7s ease-in-out infinite;
+}
+
+@keyframes about-orbit-breathe {
+  0%,
+  100% {
+    transform: scaleX(0.72);
+  }
+  50% {
+    transform: scaleX(1.14);
+  }
+}
+
+@keyframes about-orbit-travel {
+  to {
+    stroke-dashoffset: -180;
+  }
+}
+
+@keyframes about-marker-glide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(650px);
+  }
+}
+
+.about-profile__content {
+  min-height: max(860px, calc(100svh - 32px));
+  padding: clamp(1.5rem, 3.2vw, 3.5rem);
+}
+
+.about-profile__masthead {
+  display: grid;
+  grid-template-columns: 1.35fr 0.7fr 1fr 1.25fr;
+  align-items: start;
+  gap: clamp(1rem, 2vw, 2.5rem);
+}
+
+.about-profile__heading h2 {
+  font-size: clamp(1.7rem, 2.7vw, 2.7rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.about-profile__heading p,
+.about-profile__edition,
+.about-profile__meta span {
+  margin-top: 0.42rem;
+  color: rgb(255 253 250 / 48%);
+  font-size: clamp(0.63rem, 0.86vw, 0.78rem);
+  letter-spacing: 0.16em;
+}
+
+.about-profile__edition {
+  margin-top: 0.3rem;
+  text-align: center;
+}
+
+.about-profile__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  font-size: clamp(0.7rem, 1.08vw, 0.95rem);
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+
+.about-profile__meta:hover {
+  color: #f06fb6;
+}
+
+.about-profile__meta span {
+  margin: 0;
+}
+
+.about-profile__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(330px, 0.82fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  min-height: 715px;
+  padding-top: clamp(5rem, 8.5vw, 8rem);
+}
+
+.about-profile__resume {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2rem, 3vw, 3rem);
+  padding-block: clamp(0.4rem, 1vw, 1rem) clamp(0.5rem, 2vw, 2rem);
+}
+
+.about-profile__row {
+  display: grid;
+  grid-template-columns: clamp(92px, 9vw, 138px) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.about-profile__label {
+  color: #f06fb6;
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.about-profile__name {
+  font-size: clamp(1rem, 1.45vw, 1.35rem);
+  font-weight: 600;
+}
+
+.about-profile__name span {
+  color: rgb(255 253 250 / 48%);
+  font-size: 0.72em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.about-profile__facts {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+  color: rgb(255 253 250 / 76%);
+  font-size: clamp(0.72rem, 0.98vw, 0.88rem);
+}
+
+.about-profile__facts div {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.about-profile__facts dt {
+  color: rgb(255 253 250 / 38%);
+}
+
+.about-profile__jobs {
+  display: grid;
+  gap: clamp(1.35rem, 2.2vw, 2rem);
+}
+
+.about-profile__job,
+.about-profile__education > div {
+  max-width: 690px;
+}
+
+.about-profile__job-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.about-profile__job-head h3 {
+  font-size: clamp(0.86rem, 1.16vw, 1.05rem);
+  font-weight: 600;
+}
+
+.about-profile__job-head span {
+  color: rgb(255 253 250 / 42%);
+  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+  white-space: nowrap;
+}
+
+.about-profile__role {
+  margin-top: 0.35rem;
+  color: #f06fb6;
+  font-size: clamp(0.68rem, 0.9vw, 0.8rem);
+  letter-spacing: 0.08em;
+}
+
+.about-profile__description {
+  margin-top: 0.52rem;
+  color: rgb(255 253 250 / 60%);
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  line-height: 1.7;
+}
+
+.about-profile__showcase {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: clamp(1.5rem, 2.4vw, 2.25rem);
+  padding-bottom: clamp(0.75rem, 1.6vw, 1.5rem);
+}
+
+.about-profile__discipline {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.about-profile__discipline span {
+  display: inline-flex;
+  align-items: center;
+  min-width: clamp(150px, 17vw, 240px);
+  justify-content: center;
+  border: 1px solid rgb(240 111 182 / 75%);
+  background: rgb(240 111 182 / 8%);
+  padding: 0.65rem 1rem;
+  color: #fffdfa;
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  letter-spacing: 0.12em;
+}
+
+.about-profile__display-name {
+  position: relative;
+  z-index: 2;
+  margin-right: 3%;
+  color: #f06fb6;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 6.4vw, 7rem);
+  font-weight: 400;
+  line-height: 0.78;
+  letter-spacing: 0.005em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.about-profile__portrait {
+  position: relative;
+  z-index: 1;
+  width: min(84%, 430px);
+  margin-right: 3%;
+  background: #0c0c0c;
+}
+
+.about-profile__portrait::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 253 250 / 52%);
+  box-shadow: 7px 7px 0 #f06fb6;
+  content: '';
+  pointer-events: none;
+}
+
+.about-profile__portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.77;
+  object-fit: cover;
+  object-position: 50% 28%;
+  filter: saturate(0.68) contrast(1.04) brightness(1.02);
+  transition: filter 350ms ease;
+}
+
+.about-profile__portrait:hover img {
+  filter: saturate(1) contrast(1.01) brightness(1.02);
+}
+
+.about-profile__portrait figcaption {
+  position: absolute;
+  right: calc(100% + 1rem);
+  bottom: 0;
+  width: max-content;
+  color: rgb(255 253 250 / 45%);
+  font-size: clamp(0.6rem, 0.8vw, 0.72rem);
+  letter-spacing: 0.1em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.about-profile__meta:focus-visible {
+  outline: 2px solid #f06fb6;
+  outline-offset: 5px;
+}
+
 .services-panel {
   margin-top: 16px;
   border-radius: 0 !important;
@@ -340,6 +695,75 @@ img {
     height: 190px;
     width: 296px;
     border-radius: 0;
+  }
+
+  .about-profile,
+  .about-profile__content {
+    min-height: 0;
+  }
+
+  .about-profile__content {
+    padding: 1.5rem 1.1rem 3.5rem;
+  }
+
+  .about-wireframe {
+    opacity: 0.28;
+  }
+
+  .about-profile__masthead {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1.4rem;
+  }
+
+  .about-profile__edition {
+    text-align: right;
+  }
+
+  .about-profile__meta {
+    white-space: normal;
+  }
+
+  .about-profile__body {
+    grid-template-columns: 1fr;
+    gap: 4.5rem;
+    min-height: 0;
+    padding-top: 5rem;
+  }
+
+  .about-profile__resume {
+    gap: 3.5rem;
+  }
+
+  .about-profile__row {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .about-profile__job-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .about-profile__showcase {
+    min-height: 590px;
+    gap: 1.75rem;
+    padding-top: 4.5rem;
+  }
+
+  .about-profile__discipline {
+    left: 0;
+    right: auto;
+  }
+
+  .about-profile__display-name {
+    margin-right: 2%;
+    font-size: clamp(4rem, 22vw, 6rem);
+  }
+
+  .about-profile__portrait {
+    width: 72%;
+    margin-right: 6%;
   }
 }
 
