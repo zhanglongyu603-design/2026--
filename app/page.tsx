@@ -414,16 +414,16 @@ function ServicesSection() {
       className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
       aria-labelledby="contents-heading"
     >
-      <div className="mx-auto mb-16 grid max-w-6xl grid-cols-[0.28fr_0.72fr] items-end gap-5 sm:mb-20 sm:gap-10 md:mb-28">
-        <span aria-hidden="true" />
-        <h2
-          id="contents-heading"
-          className="editorial-heading text-left text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase"
-        >
-          Contents
-        </h2>
-      </div>
-      <ol className="mx-auto max-w-6xl border-t border-[rgba(12,12,12,0.15)]">
+      <h2
+        id="contents-heading"
+        className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
+      >
+        Contents
+      </h2>
+      <ol
+        className="border-t border-[rgba(12,12,12,0.15)]"
+        style={{ width: 'min(100%, 72rem)', marginInline: 'auto' }}
+      >
         {contents.map((title, index) => (
           <FadeIn key={title} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
             <div className="grid grid-cols-[0.28fr_0.72fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
