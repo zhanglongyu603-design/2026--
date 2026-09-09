@@ -36,11 +36,14 @@ const marqueeImages = [
 ];
 
 const contents = [
-  'TVC香水广告',
-  '电商广告——美的手持挂烫机',
-  'AI短剧——失忆后，我的死对头超会演',
-  '自媒体——仿喜鹊谋杀案剪辑',
-  '数字人训练',
+  { name: 'TVC香水广告', english: 'TVC Perfume Commercial' },
+  { name: '电商广告——美的手持挂烫机', english: 'E-commerce Commercial — Midea Handheld Garment Steamer' },
+  {
+    name: 'AI短剧——失忆后，我的死对头超会演',
+    english: 'AI Short Drama — After I Lost My Memory, My Archrival Became Surprisingly Good at Acting',
+  },
+  { name: '自媒体——仿喜鹊谋杀案剪辑', english: 'Social Media — Magpie Murders-Inspired Editing' },
+  { name: '数字人训练', english: 'Digital Human Training' },
 ];
 
 type Project = {
@@ -424,13 +427,18 @@ function ServicesSection() {
         className="border-t border-[rgba(12,12,12,0.15)]"
         style={{ width: 'min(100%, 72rem)', marginInline: 'auto' }}
       >
-        {contents.map((title, index) => (
-          <FadeIn key={title} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
+        {contents.map((item, index) => (
+          <FadeIn key={item.name} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
             <div className="grid grid-cols-[0.28fr_0.72fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
               <span className="service-number text-center text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <h3 className="text-left text-[clamp(1rem,2.2vw,2.1rem)] font-bold">{title}</h3>
+              <div className="min-w-0 text-left">
+                <h3 className="text-[clamp(1.2rem,2.6vw,2.6rem)] font-bold leading-tight">{item.name}</h3>
+                <p className="mt-2 text-[clamp(0.8rem,1.2vw,1rem)] font-medium leading-snug tracking-[0.04em] text-[#151515]/45 sm:mt-3">
+                  {item.english}
+                </p>
+              </div>
             </div>
           </FadeIn>
         ))}
