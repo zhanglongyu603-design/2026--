@@ -54,6 +54,7 @@ type Project = {
   poster?: string;
   actionHref?: string;
   actionLabel?: string;
+  actionProminent?: boolean;
 };
 
 const projects: Project[] = [
@@ -86,6 +87,7 @@ const projects: Project[] = [
     poster: '/ai-short-drama-poster.jpg',
     actionHref: '/ai-short-drama-process',
     actionLabel: '制作过程',
+    actionProminent: true,
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85',
@@ -97,6 +99,9 @@ const projects: Project[] = [
     category: 'Personal',
     video: '/douyin-video.mp4',
     poster: '/douyin-video-poster.jpg',
+    actionHref: 'https://acnd2cprlmfq.feishu.cn/wiki/HyPxwQ1wCiMQhGkxizPc3JV1nae',
+    actionLabel: '飞书链接',
+    actionProminent: true,
     images: [],
   },
 ];
@@ -507,7 +512,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <LiveProjectButton
               href={project.actionHref}
               label={project.actionLabel}
-              prominent={project.name === 'AI Short Drama'}
+              prominent={project.actionProminent}
             />
           </div>
         </div>
