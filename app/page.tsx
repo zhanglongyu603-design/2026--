@@ -424,7 +424,7 @@ function ServicesSection() {
         {contents.map((title, index) => (
           <FadeIn key={title} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
             <div className="grid grid-cols-[0.32fr_0.68fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
-              <span className="service-number text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
+              <span className="service-number pl-3 text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6] sm:pl-6 md:pl-10">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-bold">{title}</h3>
