@@ -102,6 +102,8 @@ type Project = {
   images: string[];
   video?: string;
   poster?: string;
+  actionHref?: string;
+  actionLabel?: string;
 };
 
 const projects: Project[] = [
@@ -132,6 +134,8 @@ const projects: Project[] = [
     category: 'Personal',
     video: '/ai-short-drama.mp4',
     poster: '/ai-short-drama-poster.jpg',
+    actionHref: '/ai-short-drama-process',
+    actionLabel: '制作过程',
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85',
@@ -429,13 +433,13 @@ function ServicesSection() {
   );
 }
 
-function LiveProjectButton() {
+function LiveProjectButton({ href = '#contact', label = 'Live Project' }: { href?: string; label?: string }) {
   return (
     <a
-      href="#contact"
+      href={href}
       className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#F06FB6] px-8 py-3 text-sm font-semibold tracking-widest text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] sm:px-10 sm:py-3.5 sm:text-base"
     >
-      Live Project
+      {label}
       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
     </a>
   );
@@ -470,7 +474,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.name}
           </h3>
           <div className="col-span-2 md:col-span-1">
-            <LiveProjectButton />
+            <LiveProjectButton href={project.actionHref} label={project.actionLabel} />
           </div>
         </div>
 
