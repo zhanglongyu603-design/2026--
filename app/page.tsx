@@ -42,6 +42,7 @@ type Project = {
   images: string[];
   video?: string;
   poster?: string;
+  documentPages?: string[];
   actionHref?: string;
   actionLabel?: string;
   actionProminent?: boolean;
@@ -93,6 +94,18 @@ const projects: Project[] = [
     actionLabel: '飞书链接',
     actionProminent: true,
     images: [],
+  },
+  {
+    name: 'Digital Human Training',
+    category: 'Personal',
+    images: [],
+    documentPages: Array.from(
+      { length: 9 },
+      (_, index) => `/project-05-digital-human/page-${String(index + 1).padStart(2, '0')}.jpg`,
+    ),
+    actionHref: '#project-05-document',
+    actionLabel: '查看项目',
+    actionProminent: true,
   },
 ];
 
@@ -542,6 +555,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
   const targetScale = 0.94;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+  const isDocumentProject = Boolean(project.documentPages?.length);
 
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
 
@@ -549,11 +563,17 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <div
       ref={container}
       id={`project-card-${String(index + 1).padStart(2, '0')}`}
-      className="relative h-[85vh] min-h-[620px] scroll-mt-4"
+      className={`relative scroll-mt-4 ${isDocumentProject ? 'pb-16 sm:pb-24' : 'h-[85vh] min-h-[620px]'}`}
     >
       <motion.article
-        style={{ ...cardStyle, scale }}
-        className="project-card sticky overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8"
+        style={{ ...cardStyle, scale: isDocumentProject ? 1 : scale }}
+        initial={isDocumentProject ? { opacity: 0, y: 70 } : undefined}
+        whileInView={isDocumentProject ? { opacity: 1, y: 0 } : undefined}
+        viewport={isDocumentProject ? { once: true, margin: '-8% 0px', amount: 0.02 } : undefined}
+        transition={isDocumentProject ? { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } : undefined}
+        className={`project-card overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8 ${
+          isDocumentProject ? 'relative' : 'sticky'
+        }`}
         aria-labelledby={`project-${index}`}
       >
         <div className="mb-5 grid grid-cols-[auto_1fr] items-end gap-x-5 gap-y-4 sm:mb-6 md:grid-cols-[auto_0.45fr_1fr_auto] md:gap-x-8">
@@ -578,7 +598,26 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
 
-        {project.video ? (
+        {project.documentPages ? (
+          <div
+            id="project-05-document"
+            className="overflow-hidden rounded-[12px] border border-[#F8F5F2]/70 bg-[#101010] sm:rounded-[16px] md:rounded-[20px]"
+          >
+            {project.documentPages.map((src, pageIndex) => (
+              <motion.img
+                key={src}
+                src={src}
+                alt={`Digital Human Training project presentation, section ${pageIndex + 1}`}
+                loading="lazy"
+                initial={{ opacity: 0.25, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '12% 0px', amount: 0.04 }}
+                transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+                className="block h-auto w-full"
+              />
+            ))}
+          </div>
+        ) : project.video ? (
           <video
             className="project-video"
             controls
