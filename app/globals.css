@@ -144,6 +144,7 @@ img {
 
 .hero-footer {
   margin-bottom: clamp(4.75rem, 12.5vw, 11.75rem);
+  padding-inline: 1.5rem;
 }
 
 .hero-video-wrap {
@@ -685,6 +686,7 @@ img {
 
   .hero-footer {
     margin-bottom: clamp(4.25rem, 16vw, 6rem);
+    padding-inline: 1rem;
   }
 
   .marquee-viewport {
