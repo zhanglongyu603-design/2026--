@@ -694,8 +694,9 @@ img {
   }
 
   .marquee-viewport img {
-    height: 190px;
+    height: auto;
     width: 296px;
+    aspect-ratio: 16 / 9;
     border-radius: 0;
   }
 
