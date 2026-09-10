@@ -571,6 +571,10 @@ img {
   border: 1px solid rgb(255 253 250 / 70%);
 }
 
+.project-card .project-document-image {
+  border: 0;
+}
+
 .project-video {
   display: block;
   width: 100%;

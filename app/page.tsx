@@ -8,7 +8,7 @@ import {
   type ElementType,
   type ReactNode,
 } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
 
 const marqueeTopImages = [
@@ -42,7 +42,8 @@ type Project = {
   images: string[];
   video?: string;
   poster?: string;
-  documentPages?: string[];
+  documentCover?: string;
+  documentDetails?: string;
   actionHref?: string;
   actionLabel?: string;
   actionProminent?: boolean;
@@ -99,11 +100,8 @@ const projects: Project[] = [
     name: 'Digital Human Training',
     category: 'Personal',
     images: [],
-    documentPages: Array.from(
-      { length: 9 },
-      (_, index) => `/project-05-digital-human/page-${String(index + 1).padStart(2, '0')}.jpg`,
-    ),
-    actionHref: '#project-05-document',
+    documentCover: '/project-05-cover.jpg',
+    documentDetails: '/project-05-details.jpg',
     actionLabel: '查看项目',
     actionProminent: true,
   },
@@ -530,32 +528,68 @@ function LiveProjectButton({
   href = '#contact',
   label = 'Live Project',
   prominent = false,
+  onClick,
+  expanded,
+  controls,
 }: {
   href?: string;
   label?: string;
   prominent?: boolean;
+  onClick?: () => void;
+  expanded?: boolean;
+  controls?: string;
 }) {
-  return (
-    <a
-      href={href}
-      className={`inline-flex shrink-0 items-center rounded-full border-2 border-[#F06FB6] font-semibold text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] ${
-        prominent
-          ? 'gap-3 px-8 py-4 text-lg tracking-[0.08em] sm:px-12 sm:py-5 sm:text-2xl'
-          : 'gap-2 px-8 py-3 text-sm tracking-widest sm:px-10 sm:py-3.5 sm:text-base'
-      }`}
-    >
+  const className = `inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-[#F06FB6] font-semibold text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] ${
+    prominent
+      ? 'gap-3 px-8 py-4 text-lg tracking-[0.08em] sm:px-12 sm:py-5 sm:text-2xl'
+      : 'gap-2 px-8 py-3 text-sm tracking-widest sm:px-10 sm:py-3.5 sm:text-base'
+  }`;
+  const content = (
+    <>
       {label}
-      <ArrowUpRight className={prominent ? 'h-6 w-6 sm:h-7 sm:w-7' : 'h-4 w-4'} aria-hidden="true" />
+      <ArrowUpRight
+        className={`${prominent ? 'h-6 w-6 sm:h-7 sm:w-7' : 'h-4 w-4'} transition-transform ${expanded ? 'rotate-90' : ''}`}
+        aria-hidden="true"
+      />
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={className}
+        onClick={onClick}
+        aria-expanded={expanded}
+        aria-controls={controls}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <a href={href} className={className}>
+      {content}
     </a>
   );
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const container = useRef<HTMLDivElement>(null);
+  const [isDocumentOpen, setIsDocumentOpen] = useState(false);
   const { scrollYProgress } = useScroll({ target: container, offset: ['start end', 'start start'] });
   const targetScale = 0.94;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
-  const isDocumentProject = Boolean(project.documentPages?.length);
+  const isDocumentProject = Boolean(project.documentCover && project.documentDetails);
+  const isExpandedDocument = isDocumentProject && isDocumentOpen;
+
+  const collapseDocument = () => {
+    setIsDocumentOpen(false);
+    window.setTimeout(() => {
+      container.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  };
 
   const cardStyle = { '--card-offset': `${index * 28}px` } as CSSProperties;
 
@@ -563,16 +597,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <div
       ref={container}
       id={`project-card-${String(index + 1).padStart(2, '0')}`}
-      className={`relative scroll-mt-4 ${isDocumentProject ? 'pb-16 sm:pb-24' : 'h-[85vh] min-h-[620px]'}`}
+      className={`relative w-full scroll-mt-4 ${
+        isExpandedDocument ? 'pb-16 sm:pb-24' : 'h-[85vh] min-h-[620px]'
+      }`}
     >
       <motion.article
-        style={{ ...cardStyle, scale: isDocumentProject ? 1 : scale }}
-        initial={isDocumentProject ? { opacity: 0, y: 70 } : undefined}
-        whileInView={isDocumentProject ? { opacity: 1, y: 0 } : undefined}
-        viewport={isDocumentProject ? { once: true, margin: '-8% 0px', amount: 0.02 } : undefined}
-        transition={isDocumentProject ? { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } : undefined}
-        className={`project-card overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8 ${
-          isDocumentProject ? 'relative' : 'sticky'
+        style={{ ...cardStyle, scale }}
+        className={`project-card w-full overflow-hidden rounded-[18px] border-2 border-[#F8F5F2] bg-[#171717] p-4 text-[#F8F5F2] sm:rounded-[22px] sm:p-6 md:rounded-[26px] md:p-8 ${
+          isExpandedDocument ? 'relative' : 'sticky'
         }`}
         aria-labelledby={`project-${index}`}
       >
@@ -592,30 +624,52 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <div className="col-span-2 md:col-span-1">
             <LiveProjectButton
               href={project.actionHref}
-              label={project.actionLabel}
+              label={isDocumentProject ? (isDocumentOpen ? '收起项目' : '查看项目') : project.actionLabel}
               prominent={project.actionProminent}
+              onClick={isDocumentProject ? () => setIsDocumentOpen((open) => !open) : undefined}
+              expanded={isDocumentProject ? isDocumentOpen : undefined}
+              controls={isDocumentProject ? 'project-05-details' : undefined}
             />
           </div>
         </div>
 
-        {project.documentPages ? (
-          <div
-            id="project-05-document"
-            className="overflow-hidden rounded-[12px] border border-[#F8F5F2]/70 bg-[#101010] sm:rounded-[16px] md:rounded-[20px]"
-          >
-            {project.documentPages.map((src, pageIndex) => (
-              <motion.img
-                key={src}
-                src={src}
-                alt={`Digital Human Training project presentation, section ${pageIndex + 1}`}
-                loading="lazy"
-                initial={{ opacity: 0.25, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '12% 0px', amount: 0.04 }}
-                transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
-                className="block h-auto w-full"
-              />
-            ))}
+        {project.documentCover && project.documentDetails ? (
+          <div className="overflow-hidden rounded-[12px] border border-[#F8F5F2]/70 bg-[#101010] sm:rounded-[16px] md:rounded-[20px]">
+            <img
+              src={project.documentCover}
+              alt="Digital Human Training project cover"
+              loading="lazy"
+              className="project-document-image block aspect-video h-auto w-full object-cover"
+            />
+            <AnimatePresence initial={false}>
+              {isDocumentOpen ? (
+                <motion.div
+                  id="project-05-details"
+                  key="project-05-details"
+                  initial={{ opacity: 0, y: 36 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="-mt-px"
+                >
+                  <img
+                    src={project.documentDetails}
+                    alt="Digital Human Training project details"
+                    loading="lazy"
+                    className="project-document-image block h-auto w-full"
+                  />
+                  <div className="flex justify-end bg-[#171717] px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10">
+                    <LiveProjectButton
+                      label="收起项目"
+                      prominent={project.actionProminent}
+                      onClick={collapseDocument}
+                      expanded
+                      controls="project-05-details"
+                    />
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
         ) : project.video ? (
           <video
