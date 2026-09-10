@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 
 const marqueeImages = [
   'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
@@ -140,19 +140,87 @@ function FadeIn({
   );
 }
 
-function ContactButton({ className = '' }: { className?: string }) {
+function ContactButton({
+  className = '',
+  onClick,
+}: {
+  className?: string;
+  onClick: () => void;
+}) {
   return (
-    <a
-      href="mailto:hello@jack3d.com?subject=Let%27s%20create%20something"
+    <button
+      type="button"
+      onClick={onClick}
       className={`contact-button ${className}`}
+      aria-haspopup="dialog"
     >
       Contact Me
       <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-    </a>
+    </button>
   );
 }
 
-function HeroSection() {
+function ContactModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    closeButtonRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocus?.focus();
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#151515]/75 p-4 backdrop-blur-sm sm:p-8"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label="微信联系二维码"
+        initial={{ opacity: 0, scale: 0.9, y: 24 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+        className="relative w-[min(88vw,430px)] overflow-hidden rounded-[24px] border-2 border-[#151515] bg-white shadow-[10px_10px_0_#F06FB6]"
+      >
+        <button
+          ref={closeButtonRef}
+          type="button"
+          onClick={onClose}
+          aria-label="关闭联系二维码弹窗"
+          className="absolute top-3 right-3 z-10 grid h-11 w-11 place-items-center rounded-full border-2 border-[#151515] bg-[#F06FB6] text-[#151515] transition-transform hover:rotate-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:top-4 sm:right-4"
+        >
+          <X className="h-6 w-6" aria-hidden="true" />
+        </button>
+        <img
+          src="/contact-wechat.jpg"
+          alt="张龙煜的微信二维码，昵称 ZikL.，湖北宜昌"
+          className="block max-h-[86svh] w-full object-contain"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
+function HeroSection({ onContact }: { onContact: () => void }) {
   return (
     <section className="hero-panel relative flex h-screen min-h-[620px] flex-col overflow-x-clip" aria-labelledby="hero-heading">
       <FadeIn y={-20}>
@@ -207,7 +275,7 @@ function HeroSection() {
           </p>
         </FadeIn>
         <FadeIn delay={0.5} y={20}>
-          <ContactButton />
+          <ContactButton onClick={onContact} />
         </FadeIn>
       </div>
     </section>
@@ -561,7 +629,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
-function ProjectsSection() {
+function ProjectsSection({ onContact }: { onContact: () => void }) {
   return (
     <section
       id="projects"
@@ -585,7 +653,7 @@ function ProjectsSection() {
 
       <footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center sm:pt-24">
         <p className="text-sm font-medium tracking-[0.28em] text-[#F8F5F2]/60 uppercase">Available for selected projects</p>
-        <ContactButton />
+        <ContactButton onClick={onContact} />
         <p className="text-sm text-[#F8F5F2]/40">© 2026 Jack — 3D Creator</p>
       </footer>
     </section>
@@ -593,13 +661,18 @@ function ProjectsSection() {
 }
 
 export default function Home() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   return (
-    <main className="site-shell min-h-screen overflow-x-clip bg-[#F3A7D2]">
-      <HeroSection />
-      <MarqueeSection />
-      <AboutSection />
-      <ServicesSection />
-      <ProjectsSection />
-    </main>
+    <>
+      <main className="site-shell min-h-screen overflow-x-clip bg-[#F3A7D2]">
+        <HeroSection onContact={() => setIsContactOpen(true)} />
+        <MarqueeSection />
+        <AboutSection />
+        <ServicesSection />
+        <ProjectsSection onContact={() => setIsContactOpen(true)} />
+      </main>
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+    </>
   );
 }
