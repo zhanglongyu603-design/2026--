@@ -197,10 +197,13 @@ function HeroSection() {
         </video>
       </FadeIn>
 
-      <div className="hero-footer relative z-30 mt-auto flex items-end justify-between px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
+      <div className="hero-footer relative z-30 mt-auto flex items-end justify-between px-4 pb-7 sm:px-6 sm:pb-8 md:pb-10">
         <FadeIn delay={0.35} y={20}>
-          <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-medium leading-snug tracking-wide text-[#151515] uppercase sm:max-w-[220px] md:max-w-[260px]">
-            A 3D creator driven by crafting striking and unforgettable projects
+          <p className="max-w-[760px] text-[clamp(0.72rem,1.15vw,1.25rem)] font-medium leading-snug tracking-wide text-[#151515] uppercase">
+            <span className="block md:whitespace-nowrap">Driven by visual storytelling,</span>
+            <span className="block md:whitespace-nowrap">I deliver end-to-end creative services with AIGC,</span>
+            <span className="block md:whitespace-nowrap">producing memorable live commercial projects</span>
+            <span className="block md:whitespace-nowrap">and personal short-form video works</span>
           </p>
         </FadeIn>
         <FadeIn delay={0.5} y={20}>
