@@ -12,10 +12,10 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
 
 const marqueeTopImages = [
-  '/marquee-top-01.png',
+  '/marquee-top-04.png',
   '/marquee-top-02.png',
   '/marquee-top-03.png',
-  '/marquee-top-04.png',
+  '/marquee-top-01.png',
 ];
 
 const marqueeBottomImages = [
