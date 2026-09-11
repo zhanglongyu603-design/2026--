@@ -753,16 +753,10 @@ function AboutSection() {
                 ZHANG<br />LONGYU
               </p>
             </FadeIn>
-            <motion.figure
-              className="about-profile__portrait"
-              initial={{ opacity: 0.72, x: 24, scale: 0.985 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.05 }}
-              transition={{ duration: 1, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <img src="/about-zhanglongyu.jpg" alt="张龙煜个人照片" loading="eager" />
+            <figure className="about-profile__portrait">
+              <img src="/about-zhanglongyu-camera.jpg" alt="张龙煜手持相机的个人照片" loading="eager" />
               <figcaption>VISUAL COMMUNICATION / 2022–2026</figcaption>
-            </motion.figure>
+            </figure>
           </div>
         </div>
       </div>
@@ -1053,7 +1047,17 @@ function ProjectsSection({ onContact }: { onContact: () => void }) {
         ))}
       </div>
 
-      <footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center sm:pt-24">
+      <footer id="contact" className="project-contact-footer flex flex-col items-center gap-8 text-center">
+        <motion.img
+          src="/contact-avatar.png"
+          alt="双手托腮、身旁带爱心的卡通女孩表情"
+          loading="lazy"
+          initial={{ opacity: 0, y: 36, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.45 }}
+          transition={{ duration: 0.72, ease: [0.25, 0.1, 0.25, 1] }}
+          className="contact-avatar h-auto w-[clamp(10rem,18vw,15rem)]"
+        />
         <p className="text-sm font-medium tracking-[0.28em] text-[#F8F5F2]/60 uppercase">Available for selected projects</p>
         <ContactButton onClick={onContact} />
         <p className="text-sm text-[#F8F5F2]/40">© 2026 Jack — 3D Creator</p>

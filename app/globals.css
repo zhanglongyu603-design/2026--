@@ -511,12 +511,6 @@ img {
   aspect-ratio: 0.77;
   object-fit: cover;
   object-position: 50% 28%;
-  filter: saturate(0.68) contrast(1.04) brightness(1.02);
-  transition: filter 350ms ease;
-}
-
-.about-profile__portrait:hover img {
-  filter: saturate(1) contrast(1.01) brightness(1.02);
 }
 
 .about-profile__portrait figcaption {
@@ -625,6 +619,29 @@ img {
   box-shadow: 1px 1px 0 #151515;
   background: #151515;
   color: #fffdfa;
+}
+
+.project-contact-footer {
+  padding-top: clamp(10rem, 20vw, 19rem);
+}
+
+.contact-avatar {
+  filter: drop-shadow(0 18px 28px rgb(0 0 0 / 34%));
+  animation: contact-avatar-float 4.8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes contact-avatar-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -1deg;
+  }
+
+  50% {
+    translate: 0 -10px;
+    rotate: 1deg;
+  }
 }
 
 .marquee-viewport {
