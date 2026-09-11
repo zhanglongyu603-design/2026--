@@ -7,6 +7,12 @@ type WaterRippleImageProps = {
   alt: string;
   className?: string;
   strength?: number;
+  protectedArea?: {
+    centerX: number;
+    centerY: number;
+    radiusX: number;
+    radiusY: number;
+  };
 };
 
 const vertexShaderSource = `
@@ -28,6 +34,7 @@ const fragmentShaderSource = `
   uniform float u_ratio;
   uniform float u_image_ratio;
   uniform float u_strength;
+  uniform vec4 u_protected_area;
 
   void main() {
     vec2 image_uv = v_uv;
@@ -38,18 +45,23 @@ const fragmentShaderSource = `
       image_uv.x = (image_uv.x - 0.5) * u_ratio / u_image_ratio + 0.5;
     }
 
-    float t = u_time * 0.00018;
-    float wave_x = sin(image_uv.y * 17.0 + t * 1.25 + sin(image_uv.x * 6.0) * 0.7);
-    float wave_y = cos(image_uv.x * 13.0 - t * 0.9 + sin(image_uv.y * 7.0) * 0.55);
-    float crossing = sin((image_uv.x + image_uv.y) * 20.0 + t * 0.55);
+    float t = u_time * 0.00032;
+    float wave_x = sin(image_uv.y * 22.0 + t * 1.7 + sin(image_uv.x * 8.0 + t * 0.4) * 0.9);
+    float wave_y = cos(image_uv.x * 18.0 - t * 1.35 + sin(image_uv.y * 9.0 - t * 0.3) * 0.75);
+    float crossing = sin((image_uv.x + image_uv.y) * 28.0 + t * 0.9);
+    float broad_wave = sin((image_uv.x - image_uv.y) * 9.0 - t * 0.55);
+
+    vec2 protected_distance = (image_uv - u_protected_area.xy) / u_protected_area.zw;
+    float subject_protection = 1.0 - smoothstep(0.72, 1.16, length(protected_distance));
+    float ripple_mask = 1.0 - subject_protection;
 
     vec2 displacement = vec2(
-      wave_x + crossing * 0.38,
-      wave_y + crossing * 0.28
-    ) * 0.00145 * u_strength;
+      wave_x + crossing * 0.48 + broad_wave * 0.3,
+      wave_y + crossing * 0.38 - broad_wave * 0.24
+    ) * 0.0043 * u_strength * ripple_mask;
 
     vec4 color = texture2D(u_image, image_uv + displacement);
-    float shimmer = (wave_x + wave_y + crossing * 0.4) * 0.0045 * u_strength;
+    float shimmer = (wave_x + wave_y + crossing * 0.55 + broad_wave * 0.35) * 0.012 * u_strength * ripple_mask;
     color.rgb += shimmer;
     gl_FragColor = color;
   }
@@ -92,7 +104,13 @@ function createProgram(gl: WebGLRenderingContext) {
   return program;
 }
 
-export function WaterRippleImage({ src, alt, className = '', strength = 0.58 }: WaterRippleImageProps) {
+export function WaterRippleImage({
+  src,
+  alt,
+  className = '',
+  strength = 0.58,
+  protectedArea = { centerX: -2, centerY: -2, radiusX: 0.01, radiusY: 0.01 },
+}: WaterRippleImageProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isReady, setIsReady] = useState(false);
@@ -126,8 +144,16 @@ export function WaterRippleImage({ src, alt, className = '', strength = 0.58 }: 
     const ratioLocation = gl.getUniformLocation(program, 'u_ratio');
     const imageRatioLocation = gl.getUniformLocation(program, 'u_image_ratio');
     const strengthLocation = gl.getUniformLocation(program, 'u_strength');
+    const protectedAreaLocation = gl.getUniformLocation(program, 'u_protected_area');
     gl.uniform1i(imageLocation, 0);
     gl.uniform1f(strengthLocation, reducedMotion ? 0 : strength);
+    gl.uniform4f(
+      protectedAreaLocation,
+      protectedArea.centerX,
+      protectedArea.centerY,
+      protectedArea.radiusX,
+      protectedArea.radiusY,
+    );
 
     const resize = () => {
       const bounds = wrapper.getBoundingClientRect();
@@ -193,7 +219,7 @@ export function WaterRippleImage({ src, alt, className = '', strength = 0.58 }: 
       if (positionBuffer) gl.deleteBuffer(positionBuffer);
       gl.deleteProgram(program);
     };
-  }, [src, strength]);
+  }, [protectedArea.centerX, protectedArea.centerY, protectedArea.radiusX, protectedArea.radiusY, src, strength]);
 
   return (
     <div ref={wrapperRef} className={`relative h-full w-full overflow-hidden bg-black ${className}`}>

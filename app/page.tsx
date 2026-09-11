@@ -19,6 +19,12 @@ import {
   type PanInfo,
 } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { WaterRippleImage } from '@/components/ui/water-ripple-image';
 
 const marqueeTopImages = [
@@ -65,6 +71,9 @@ const projects: Project[] = [
     category: 'Personal',
     video: '/tvc-advertisement.mp4',
     poster: '/tvc-advertisement-poster.jpg',
+    actionHref: 'https://acnd2cprlmfq.feishu.cn/wiki/VktQwYwIxiq4RWk1SUTceKcxnue',
+    actionLabel: '飞书链接',
+    actionProminent: true,
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85',
@@ -76,6 +85,9 @@ const projects: Project[] = [
     category: 'Personal',
     video: '/midea-garment-steamer-commercial.mp4',
     poster: '/midea-garment-steamer-commercial-poster.jpg',
+    actionHref: 'https://acnd2cprlmfq.feishu.cn/wiki/MwC4wivGsih05EkxfMzcHQDgnNf',
+    actionLabel: '飞书链接',
+    actionProminent: true,
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85',
@@ -118,11 +130,72 @@ const projects: Project[] = [
 ];
 
 const showcaseSlides = [
-  { image: '/showcase-ai-short-drama.png', label: 'AI短剧' },
-  { image: '/showcase-douyin-sketch.png', label: '抖音段子' },
-  { image: '/showcase-seeding-video.png', label: '种草视频' },
-  { image: '/showcase-ecommerce-ad.png', label: '电商广告' },
+  {
+    image: '/showcase-ai-short-drama.png',
+    label: 'AI短剧',
+    video: '/showcase-video-ai-short-drama.mp4',
+  },
+  {
+    image: '/showcase-douyin-sketch.png',
+    label: '抖音段子',
+    video: '/showcase-video-douyin-sketch.mp4',
+  },
+  {
+    image: '/showcase-seeding-video.png',
+    label: '种草视频',
+    video: '/showcase-video-seeding.mp4',
+  },
+  {
+    image: '/showcase-ecommerce-ad.png',
+    label: '电商广告',
+    video: '/showcase-video-ecommerce.mp4',
+  },
 ];
+
+type ShowcaseSlide = (typeof showcaseSlides)[number];
+
+const projectPosterSlides = [
+  { image: '/project-05-poster-spring.png', alt: '春天花会开电商海报' },
+  { image: '/project-05-poster-travel.png', alt: '去看更大的世界旅行海报' },
+  { image: '/project-05-poster-office.png', alt: '元气办公主题海报' },
+];
+
+function ProjectPosterMarquee() {
+  return (
+    <div
+      className="project-poster-stage relative h-full w-full overflow-hidden bg-[#222]"
+      role="region"
+      aria-label="三张数字人海报自动横向滚动展示"
+    >
+      <div className="project-poster-track flex h-full w-max items-center">
+        {[0, 1].map((groupIndex) => (
+          <div
+            key={groupIndex}
+            className="project-poster-group flex h-full shrink-0 items-center"
+            aria-hidden={groupIndex === 1}
+          >
+            {projectPosterSlides.map((poster) => (
+              <figure
+                key={`${groupIndex}-${poster.image}`}
+                className="project-poster-item h-[90%] shrink-0 overflow-hidden rounded-[8px] border border-white/12 bg-[#191919] shadow-[0_18px_45px_rgba(0,0,0,0.38)] sm:rounded-[14px]"
+              >
+                <img
+                  src={poster.image}
+                  alt={groupIndex === 0 ? poster.alt : ''}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                  draggable={false}
+                />
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-[7%] bg-gradient-to-r from-[#222] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-[7%] bg-gradient-to-l from-[#222] to-transparent" />
+    </div>
+  );
+}
 
 type ShowcaseConfig = {
   distanceDivisor: number;
@@ -176,12 +249,14 @@ function ShowcaseCard({
   index,
   progress,
   config,
+  onOpen,
 }: {
   image: string;
   label: string;
   index: number;
   progress: MotionValue<number>;
   config: ShowcaseConfig;
+  onOpen: () => void;
 }) {
   const total = showcaseSlides.length;
   const offset = useTransform(progress, (value) => {
@@ -195,19 +270,62 @@ function ShowcaseCard({
   const rotate = useTransform(offset, (value) => (Math.abs(value) < 0.05 ? 0 : value * config.rotationMultiplier));
   const scale = useTransform(offset, (value) => 1 - Math.abs(value) * config.scaleReduction);
   const opacity = useTransform(offset, [-2, -1.5, 0, 1.5, 2], [0.35, 0.78, 1, 0.78, 0.35]);
-  const zIndex = useTransform(offset, (value) => Math.round(40 - Math.abs(value) * 10));
+  const zIndex = useTransform(offset, (value) => Math.round(80 - Math.abs(value) * 10));
 
   return (
     <motion.figure
       style={{ x, y, rotate, scale, opacity, zIndex }}
-      className="absolute aspect-[9/16] w-[clamp(104px,18vw,310px)] overflow-hidden rounded-[10px] border border-[#F06FB6]/65 bg-[#181818] shadow-[0_18px_50px_rgba(0,0,0,0.45)] sm:rounded-[16px]"
+      className="pointer-events-none absolute aspect-[9/16] w-[clamp(104px,18vw,310px)] overflow-hidden rounded-[10px] border border-[#F06FB6]/65 bg-[#181818] shadow-[0_18px_50px_rgba(0,0,0,0.45)] sm:rounded-[16px]"
     >
       <img src={image} alt={label} className="pointer-events-none h-full w-full border-0 object-cover" draggable={false} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/28 via-transparent to-black/12" />
-      <figcaption className="pointer-events-none absolute top-2 right-2 rounded-full border border-[#F06FB6] bg-[#171717]/88 px-2.5 py-1 text-[clamp(0.58rem,1.2vw,1.15rem)] font-semibold tracking-[0.06em] text-[#F06FB6] backdrop-blur-sm sm:top-4 sm:right-4 sm:px-4 sm:py-2">
+      <button
+        type="button"
+        onClick={onOpen}
+        className="pointer-events-auto absolute top-2 right-2 cursor-pointer rounded-full border border-[#F06FB6] bg-[#171717]/88 px-2.5 py-1 text-[clamp(0.58rem,1.2vw,1.15rem)] font-semibold tracking-[0.06em] text-[#F06FB6] backdrop-blur-sm transition duration-200 hover:scale-105 hover:bg-[#F06FB6] hover:text-[#171717] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F06FB6] sm:top-4 sm:right-4 sm:px-4 sm:py-2"
+        aria-label={`播放${label}视频`}
+      >
         {label}
-      </figcaption>
+      </button>
     </motion.figure>
+  );
+}
+
+function ShowcaseVideoDialog({
+  slide,
+  onClose,
+}: {
+  slide: ShowcaseSlide | null;
+  onClose: () => void;
+}) {
+  return (
+    <Dialog open={Boolean(slide)} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="w-[min(94vw,1100px)] max-w-none gap-0 overflow-hidden rounded-[18px] border border-[#F06FB6]/70 bg-[#101010] p-0 text-white shadow-[0_30px_100px_rgba(0,0,0,0.72)]"
+      >
+        <DialogTitle className="sr-only">{slide ? `正在播放：${slide.label}` : '作品视频'}</DialogTitle>
+        <DialogClose
+          className="absolute top-3 right-3 z-10 grid size-11 cursor-pointer place-items-center rounded-full border border-white/55 bg-black/60 text-white backdrop-blur-md transition hover:scale-105 hover:border-[#F06FB6] hover:bg-[#F06FB6] hover:text-[#171717] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F06FB6]"
+          aria-label="关闭视频"
+        >
+          <X className="size-6" aria-hidden="true" />
+        </DialogClose>
+        {slide && (
+          <video
+            key={slide.video}
+            src={slide.video}
+            controls
+            autoPlay
+            playsInline
+            preload="metadata"
+            className="max-h-[84vh] w-full bg-black object-contain"
+          >
+            您的浏览器暂不支持视频播放。
+          </video>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -215,6 +333,7 @@ function ProjectShowcaseCarousel() {
   const progress = useMotionValue(0);
   const startProgress = useRef(0);
   const [windowWidth, setWindowWidth] = useState(1280);
+  const [activeSlide, setActiveSlide] = useState<ShowcaseSlide | null>(null);
   const config = getShowcaseConfig(windowWidth);
 
   useEffect(() => {
@@ -258,12 +377,15 @@ function ProjectShowcaseCarousel() {
           index={index}
           progress={progress}
           config={config}
+          onOpen={() => setActiveSlide(slide)}
         />
       ))}
 
       <p className="pointer-events-none absolute right-4 bottom-3 text-[clamp(0.55rem,0.9vw,0.8rem)] tracking-[0.16em] text-white/42 uppercase sm:right-8 sm:bottom-5">
         Drag to explore
       </p>
+
+      <ShowcaseVideoDialog slide={activeSlide} onClose={() => setActiveSlide(null)} />
     </div>
   );
 }
@@ -667,17 +789,23 @@ function ServicesSection() {
       >
         {contents.map((item, index) => (
           <FadeIn key={item.name} delay={index * 0.1} as="li" className="border-b border-[rgba(12,12,12,0.15)]">
-            <div className="grid grid-cols-[0.28fr_0.72fr] items-center gap-5 py-8 sm:gap-10 sm:py-10 md:py-12">
-              <span className="service-number text-center text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6]">
+            <a
+              href={`#project-card-${String(index + 1).padStart(2, '0')}`}
+              className="group grid grid-cols-[0.28fr_0.72fr] items-center gap-5 px-2 py-8 transition-colors duration-300 hover:bg-[#F06FB6]/8 focus-visible:bg-[#F06FB6]/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F06FB6] sm:gap-10 sm:px-4 sm:py-10 md:py-12"
+              aria-label={`跳转到项目${index + 1}：${item.name}`}
+            >
+              <span className="service-number text-center text-[clamp(3rem,10vw,140px)] font-black leading-none text-[#F06FB6] transition-transform duration-300 group-hover:translate-x-2 group-focus-visible:translate-x-2">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <div className="min-w-0 text-left">
-                <h3 className="text-[clamp(1.2rem,2.6vw,2.6rem)] font-bold leading-tight">{item.name}</h3>
+                <h3 className="text-[clamp(1.2rem,2.6vw,2.6rem)] font-bold leading-tight transition-colors duration-300 group-hover:text-[#F06FB6] group-focus-visible:text-[#F06FB6]">
+                  {item.name}
+                </h3>
                 <p className="mt-2 text-[clamp(0.8rem,1.2vw,1rem)] font-medium leading-snug tracking-[0.04em] text-[#151515]/45 sm:mt-3">
                   {item.english}
                 </p>
               </div>
-            </div>
+            </a>
           </FadeIn>
         ))}
       </ol>
@@ -824,19 +952,27 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                       <WaterRippleImage
                         src="/ripple-jewelry-banner.png"
                         alt="Daisy Doll Jewelry Syrup Gloss 广告"
-                        strength={0.54}
+                        strength={0.84}
+                        protectedArea={{ centerX: 0.42, centerY: 0.52, radiusX: 0.31, radiusY: 0.62 }}
                       />
                     </div>
                     <div className="absolute inset-x-0 overflow-hidden" style={{ top: '31.55%', height: '6.2%' }}>
                       <WaterRippleImage
                         src="/ripple-rio-banner.png"
                         alt="RIO 微醺果冻酒广告"
-                        strength={0.5}
+                        strength={0.78}
+                        protectedArea={{ centerX: 0.61, centerY: 0.52, radiusX: 0.29, radiusY: 0.62 }}
                       />
                     </div>
                     <div
                       className="absolute inset-x-0 overflow-hidden bg-[#222]"
-                      style={{ top: '44.76%', height: '6.55%' }}
+                      style={{ top: '37.75%', height: '7.01%' }}
+                    >
+                      <ProjectPosterMarquee />
+                    </div>
+                    <div
+                      className="absolute inset-x-0 overflow-hidden bg-[#222]"
+                      style={{ top: '44.76%', height: '6.2%' }}
                     >
                       <ProjectShowcaseCarousel />
                     </div>

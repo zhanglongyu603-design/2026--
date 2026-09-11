@@ -637,6 +637,45 @@ img {
   transform-origin: top center;
 }
 
+@keyframes project-poster-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.project-poster-track {
+  animation: project-poster-scroll 24s linear infinite;
+  will-change: transform;
+}
+
+.project-poster-group {
+  --project-poster-gap: clamp(12px, 1.25vw, 22px);
+  gap: var(--project-poster-gap);
+  padding-right: var(--project-poster-gap);
+}
+
+.project-poster-stage:hover .project-poster-track {
+  animation-play-state: paused;
+}
+
+.project-poster-item {
+  aspect-ratio: 941 / 1672;
+  transition:
+    transform 320ms ease,
+    filter 320ms ease,
+    border-color 320ms ease;
+}
+
+.project-poster-item:hover {
+  transform: scale(1.025);
+  filter: brightness(1.06);
+  border-color: rgba(240, 111, 182, 0.72);
+}
+
 @media (min-width: 640px) {
   .contact-button {
     padding: 0.875rem 2.5rem;
