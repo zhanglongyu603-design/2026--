@@ -8,8 +8,18 @@ import {
   type ElementType,
   type ReactNode,
 } from 'react';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useScroll,
+  useTransform,
+  type MotionValue,
+  type PanInfo,
+} from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
+import { WaterRippleImage } from '@/components/ui/water-ripple-image';
 
 const marqueeTopImages = [
   '/marquee-top-04.png',
@@ -106,6 +116,157 @@ const projects: Project[] = [
     actionProminent: true,
   },
 ];
+
+const showcaseSlides = [
+  { image: '/showcase-ai-short-drama.png', label: 'AI短剧' },
+  { image: '/showcase-douyin-sketch.png', label: '抖音段子' },
+  { image: '/showcase-seeding-video.png', label: '种草视频' },
+  { image: '/showcase-ecommerce-ad.png', label: '电商广告' },
+];
+
+type ShowcaseConfig = {
+  distanceDivisor: number;
+  velocityDivisor: number;
+  sensitivity: number;
+  xMultiplier: number;
+  yMultiplier: number;
+  rotationMultiplier: number;
+  scaleReduction: number;
+};
+
+function getShowcaseConfig(width: number): ShowcaseConfig {
+  if (width < 640) {
+    return {
+      distanceDivisor: 110,
+      velocityDivisor: 500,
+      sensitivity: 170,
+      xMultiplier: 82,
+      yMultiplier: 14,
+      rotationMultiplier: 7,
+      scaleReduction: 0.06,
+    };
+  }
+
+  if (width < 1024) {
+    return {
+      distanceDivisor: 150,
+      velocityDivisor: 650,
+      sensitivity: 210,
+      xMultiplier: 132,
+      yMultiplier: 24,
+      rotationMultiplier: 9,
+      scaleReduction: 0.08,
+    };
+  }
+
+  return {
+    distanceDivisor: 190,
+    velocityDivisor: 800,
+    sensitivity: 250,
+    xMultiplier: 205,
+    yMultiplier: 34,
+    rotationMultiplier: 11,
+    scaleReduction: 0.1,
+  };
+}
+
+function ShowcaseCard({
+  image,
+  label,
+  index,
+  progress,
+  config,
+}: {
+  image: string;
+  label: string;
+  index: number;
+  progress: MotionValue<number>;
+  config: ShowcaseConfig;
+}) {
+  const total = showcaseSlides.length;
+  const offset = useTransform(progress, (value) => {
+    let difference = (index - value) % total;
+    if (difference > total / 2) difference -= total;
+    if (difference < -total / 2) difference += total;
+    return difference;
+  });
+  const x = useTransform(offset, (value) => value * config.xMultiplier);
+  const y = useTransform(offset, (value) => Math.abs(value) * config.yMultiplier);
+  const rotate = useTransform(offset, (value) => (Math.abs(value) < 0.05 ? 0 : value * config.rotationMultiplier));
+  const scale = useTransform(offset, (value) => 1 - Math.abs(value) * config.scaleReduction);
+  const opacity = useTransform(offset, [-2, -1.5, 0, 1.5, 2], [0.35, 0.78, 1, 0.78, 0.35]);
+  const zIndex = useTransform(offset, (value) => Math.round(40 - Math.abs(value) * 10));
+
+  return (
+    <motion.figure
+      style={{ x, y, rotate, scale, opacity, zIndex }}
+      className="absolute aspect-[9/16] w-[clamp(104px,18vw,310px)] overflow-hidden rounded-[10px] border border-[#F06FB6]/65 bg-[#181818] shadow-[0_18px_50px_rgba(0,0,0,0.45)] sm:rounded-[16px]"
+    >
+      <img src={image} alt={label} className="pointer-events-none h-full w-full border-0 object-cover" draggable={false} />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/28 via-transparent to-black/12" />
+      <figcaption className="pointer-events-none absolute top-2 right-2 rounded-full border border-[#F06FB6] bg-[#171717]/88 px-2.5 py-1 text-[clamp(0.58rem,1.2vw,1.15rem)] font-semibold tracking-[0.06em] text-[#F06FB6] backdrop-blur-sm sm:top-4 sm:right-4 sm:px-4 sm:py-2">
+        {label}
+      </figcaption>
+    </motion.figure>
+  );
+}
+
+function ProjectShowcaseCarousel() {
+  const progress = useMotionValue(0);
+  const startProgress = useRef(0);
+  const [windowWidth, setWindowWidth] = useState(1280);
+  const config = getShowcaseConfig(windowWidth);
+
+  useEffect(() => {
+    const updateWidth = () => setWindowWidth(window.innerWidth);
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const settleCarousel = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const distanceShift = -info.offset.x / config.distanceDivisor;
+    const velocityShift = -info.velocity.x / config.velocityDivisor;
+    const shift = Math.max(-3, Math.min(3, Math.round(distanceShift + velocityShift)));
+    const target = Math.round(startProgress.current) + shift;
+
+    animate(progress, target, { type: 'spring', stiffness: 210, damping: 30, mass: 1 });
+  };
+
+  return (
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#222] select-none">
+      <motion.div
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0}
+        onDragStart={() => {
+          startProgress.current = progress.get();
+        }}
+        onDrag={(_, info) => {
+          progress.set(progress.get() - info.delta.x / config.sensitivity);
+        }}
+        onDragEnd={settleCarousel}
+        className="absolute inset-0 z-50 cursor-grab touch-pan-y active:cursor-grabbing"
+        aria-label="左右拖动浏览四个作品类型"
+      />
+
+      {showcaseSlides.map((slide, index) => (
+        <ShowcaseCard
+          key={slide.label}
+          image={slide.image}
+          label={slide.label}
+          index={index}
+          progress={progress}
+          config={config}
+        />
+      ))}
+
+      <p className="pointer-events-none absolute right-4 bottom-3 text-[clamp(0.55rem,0.9vw,0.8rem)] tracking-[0.16em] text-white/42 uppercase sm:right-8 sm:bottom-5">
+        Drag to explore
+      </p>
+    </div>
+  );
+}
 
 type FadeInProps = {
   children: ReactNode;
@@ -652,12 +813,34 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
                   className="-mt-px"
                 >
-                  <img
-                    src={project.documentDetails}
-                    alt="Digital Human Training project details"
-                    loading="lazy"
-                    className="project-document-image block h-auto w-full"
-                  />
+                  <div className="relative">
+                    <img
+                      src={project.documentDetails}
+                      alt="Digital Human Training project details"
+                      loading="lazy"
+                      className="project-document-image block h-auto w-full"
+                    />
+                    <div className="absolute inset-x-0 overflow-hidden" style={{ top: '25.35%', height: '6.2%' }}>
+                      <WaterRippleImage
+                        src="/ripple-jewelry-banner.png"
+                        alt="Daisy Doll Jewelry Syrup Gloss 广告"
+                        strength={0.54}
+                      />
+                    </div>
+                    <div className="absolute inset-x-0 overflow-hidden" style={{ top: '31.55%', height: '6.2%' }}>
+                      <WaterRippleImage
+                        src="/ripple-rio-banner.png"
+                        alt="RIO 微醺果冻酒广告"
+                        strength={0.5}
+                      />
+                    </div>
+                    <div
+                      className="absolute inset-x-0 overflow-hidden bg-[#222]"
+                      style={{ top: '44.76%', height: '6.55%' }}
+                    >
+                      <ProjectShowcaseCarousel />
+                    </div>
+                  </div>
                   <div className="flex justify-end bg-[#171717] px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10">
                     <LiveProjectButton
                       label="收起项目"
