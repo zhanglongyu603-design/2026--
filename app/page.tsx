@@ -10,13 +10,12 @@ import {
 } from 'react';
 import {
   AnimatePresence,
-  animate,
   motion,
   useMotionValue,
   useScroll,
+  useSpring,
   useTransform,
   type MotionValue,
-  type PanInfo,
 } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
 import {
@@ -198,9 +197,6 @@ function ProjectPosterMarquee() {
 }
 
 type ShowcaseConfig = {
-  distanceDivisor: number;
-  velocityDivisor: number;
-  sensitivity: number;
   xMultiplier: number;
   yMultiplier: number;
   rotationMultiplier: number;
@@ -210,9 +206,6 @@ type ShowcaseConfig = {
 function getShowcaseConfig(width: number): ShowcaseConfig {
   if (width < 640) {
     return {
-      distanceDivisor: 110,
-      velocityDivisor: 500,
-      sensitivity: 170,
       xMultiplier: 82,
       yMultiplier: 14,
       rotationMultiplier: 7,
@@ -222,9 +215,6 @@ function getShowcaseConfig(width: number): ShowcaseConfig {
 
   if (width < 1024) {
     return {
-      distanceDivisor: 150,
-      velocityDivisor: 650,
-      sensitivity: 210,
       xMultiplier: 132,
       yMultiplier: 24,
       rotationMultiplier: 9,
@@ -233,9 +223,6 @@ function getShowcaseConfig(width: number): ShowcaseConfig {
   }
 
   return {
-    distanceDivisor: 190,
-    velocityDivisor: 800,
-    sensitivity: 250,
     xMultiplier: 205,
     yMultiplier: 34,
     rotationMultiplier: 11,
@@ -249,6 +236,9 @@ function ShowcaseCard({
   index,
   progress,
   config,
+  isHovered,
+  onBringToFront,
+  onRelease,
   onOpen,
 }: {
   image: string;
@@ -256,6 +246,9 @@ function ShowcaseCard({
   index: number;
   progress: MotionValue<number>;
   config: ShowcaseConfig;
+  isHovered: boolean;
+  onBringToFront: () => void;
+  onRelease: () => void;
   onOpen: () => void;
 }) {
   const total = showcaseSlides.length;
@@ -274,8 +267,18 @@ function ShowcaseCard({
 
   return (
     <motion.figure
-      style={{ x, y, rotate, scale, opacity, zIndex }}
-      className="pointer-events-none absolute aspect-[9/16] w-[clamp(104px,18vw,310px)] overflow-hidden rounded-[10px] border border-[#F06FB6]/65 bg-[#181818] shadow-[0_18px_50px_rgba(0,0,0,0.45)] sm:rounded-[16px]"
+      style={{ x, y, rotate, scale, opacity, zIndex: isHovered ? 120 : zIndex }}
+      animate={{ filter: isHovered ? 'brightness(1.07)' : 'brightness(1)' }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
+      onMouseEnter={onBringToFront}
+      onMouseLeave={onRelease}
+      onFocusCapture={onBringToFront}
+      onBlurCapture={onRelease}
+      className={`absolute aspect-[9/16] w-[clamp(104px,18vw,310px)] overflow-hidden rounded-[10px] border bg-[#181818] transition-[border-color,box-shadow] duration-200 sm:rounded-[16px] ${
+        isHovered
+          ? 'border-[#F06FB6] shadow-[0_28px_75px_rgba(0,0,0,0.62)]'
+          : 'border-[#F06FB6]/65 shadow-[0_18px_50px_rgba(0,0,0,0.45)]'
+      }`}
     >
       <img src={image} alt={label} className="pointer-events-none h-full w-full border-0 object-cover" draggable={false} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/28 via-transparent to-black/12" />
@@ -330,9 +333,10 @@ function ShowcaseVideoDialog({
 }
 
 function ProjectShowcaseCarousel() {
-  const progress = useMotionValue(0);
-  const startProgress = useRef(0);
+  const pointerProgress = useMotionValue(0);
+  const progress = useSpring(pointerProgress, { stiffness: 150, damping: 24, mass: 0.72 });
   const [windowWidth, setWindowWidth] = useState(1280);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeSlide, setActiveSlide] = useState<ShowcaseSlide | null>(null);
   const config = getShowcaseConfig(windowWidth);
 
@@ -343,32 +347,22 @@ function ProjectShowcaseCarousel() {
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  const settleCarousel = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const distanceShift = -info.offset.x / config.distanceDivisor;
-    const velocityShift = -info.velocity.x / config.velocityDivisor;
-    const shift = Math.max(-3, Math.min(3, Math.round(distanceShift + velocityShift)));
-    const target = Math.round(startProgress.current) + shift;
-
-    animate(progress, target, { type: 'spring', stiffness: 210, damping: 30, mass: 1 });
-  };
-
   return (
-    <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#222] select-none">
-      <motion.div
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0}
-        onDragStart={() => {
-          startProgress.current = progress.get();
-        }}
-        onDrag={(_, info) => {
-          progress.set(progress.get() - info.delta.x / config.sensitivity);
-        }}
-        onDragEnd={settleCarousel}
-        className="absolute inset-0 z-50 cursor-grab touch-pan-y active:cursor-grabbing"
-        aria-label="左右拖动浏览四个作品类型"
-      />
-
+    <div
+      className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#222] select-none"
+      role="region"
+      aria-label="左右移动鼠标可控制四张海报围绕中心轮换"
+      onPointerMove={(event) => {
+        if (event.pointerType === 'touch' || activeSlide) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        const relativeX = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+        pointerProgress.set((relativeX - 0.5) * showcaseSlides.length);
+      }}
+      onPointerLeave={() => {
+        pointerProgress.set(0);
+        setHoveredIndex(null);
+      }}
+    >
       {showcaseSlides.map((slide, index) => (
         <ShowcaseCard
           key={slide.label}
@@ -377,12 +371,15 @@ function ProjectShowcaseCarousel() {
           index={index}
           progress={progress}
           config={config}
+          isHovered={hoveredIndex === index}
+          onBringToFront={() => setHoveredIndex(index)}
+          onRelease={() => setHoveredIndex(null)}
           onOpen={() => setActiveSlide(slide)}
         />
       ))}
 
       <p className="pointer-events-none absolute right-4 bottom-3 text-[clamp(0.55rem,0.9vw,0.8rem)] tracking-[0.16em] text-white/42 uppercase sm:right-8 sm:bottom-5">
-        Drag to explore
+        Move cursor · hover to focus
       </p>
 
       <ShowcaseVideoDialog slide={activeSlide} onClose={() => setActiveSlide(null)} />
