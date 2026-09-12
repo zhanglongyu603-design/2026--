@@ -6,12 +6,14 @@ import {
   useState,
   type CSSProperties,
   type ElementType,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from 'react';
 import {
   AnimatePresence,
   motion,
   useMotionValue,
+  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -421,6 +423,114 @@ function FadeIn({
   );
 }
 
+function MaskedHeading({
+  id,
+  className,
+  children,
+}: {
+  id: string;
+  className: string;
+  children: ReactNode;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <motion.h2
+      id={id}
+      className={`masked-heading ${className}`}
+      initial={reduceMotion ? false : { opacity: 0, y: 64, clipPath: 'inset(0 0 100% 0)' }}
+      whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
+      viewport={{ once: true, amount: 0.45 }}
+      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.h2>
+  );
+}
+
+function useMagneticMotion(strength = 0.16) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 260, damping: 20, mass: 0.5 });
+  const springY = useSpring(y, { stiffness: 260, damping: 20, mass: 0.5 });
+
+  const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+    if (event.pointerType === 'touch') return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    x.set((event.clientX - bounds.left - bounds.width / 2) * strength);
+    y.set((event.clientY - bounds.top - bounds.height / 2) * strength);
+  };
+
+  const onPointerLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return { style: { x: springX, y: springY }, onPointerMove, onPointerLeave };
+}
+
+function CursorHalo() {
+  const x = useMotionValue(-80);
+  const y = useMotionValue(-80);
+  const smoothX = useSpring(x, { stiffness: 520, damping: 36, mass: 0.32 });
+  const smoothY = useSpring(y, { stiffness: 520, damping: 36, mass: 0.32 });
+  const [visible, setVisible] = useState(false);
+  const [interactive, setInteractive] = useState(false);
+
+  useEffect(() => {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!finePointer.matches) return;
+
+    let hasMoved = false;
+    let wasInteractive = false;
+    const handlePointerMove = (event: PointerEvent) => {
+      x.set(event.clientX - 18);
+      y.set(event.clientY - 18);
+      if (!hasMoved) {
+        hasMoved = true;
+        setVisible(true);
+      }
+
+      const target = event.target instanceof Element ? event.target : null;
+      const isInteractive = Boolean(target?.closest('a, button, video, [data-cursor-interactive]'));
+      if (isInteractive !== wasInteractive) {
+        wasInteractive = isInteractive;
+        setInteractive(isInteractive);
+      }
+    };
+    const handlePointerOut = (event: MouseEvent) => {
+      if (!event.relatedTarget) setVisible(false);
+    };
+    const handleWindowBlur = () => setVisible(false);
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('mouseout', handlePointerOut);
+    window.addEventListener('blur', handleWindowBlur);
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('mouseout', handlePointerOut);
+      window.removeEventListener('blur', handleWindowBlur);
+    };
+  }, [x, y]);
+
+  return (
+    <motion.div
+      className="custom-cursor-halo"
+      style={{ x: smoothX, y: smoothY }}
+      animate={{ opacity: visible ? 1 : 0, scale: interactive ? 1.65 : 1 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 150, damping: 30, restDelta: 0.001 });
+
+  return <motion.div className="site-scroll-progress" style={{ scaleX }} aria-hidden="true" />;
+}
+
 function ContactButton({
   className = '',
   onClick,
@@ -428,16 +538,19 @@ function ContactButton({
   className?: string;
   onClick: () => void;
 }) {
+  const magnetic = useMagneticMotion();
+
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
+      {...magnetic}
       className={`contact-button ${className}`}
       aria-haspopup="dialog"
     >
       Contact Me
       <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-    </button>
+    </motion.button>
   );
 }
 
@@ -685,7 +798,7 @@ function AboutSection() {
       <div className="about-profile__content relative z-10">
         <FadeIn y={-18} className="about-profile__masthead">
           <div className="about-profile__heading">
-            <h2 id="about-heading">个人介绍</h2>
+            <MaskedHeading id="about-heading" className="">个人介绍</MaskedHeading>
             <p>INTRODUCE MYSELF</p>
           </div>
           <p className="about-profile__edition">PORTFOLIO / 2026</p>
@@ -768,12 +881,12 @@ function ServicesSection() {
       className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
       aria-labelledby="contents-heading"
     >
-      <h2
+      <MaskedHeading
         id="contents-heading"
         className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
       >
         Contents
-      </h2>
+      </MaskedHeading>
       <ol
         className="border-t border-[rgba(12,12,12,0.15)]"
         style={{ width: 'min(100%, 72rem)', marginInline: 'auto' }}
@@ -819,6 +932,7 @@ function LiveProjectButton({
   expanded?: boolean;
   controls?: string;
 }) {
+  const magnetic = useMagneticMotion();
   const className = `inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-[#F06FB6] font-semibold text-[#F06FB6] uppercase transition-colors hover:bg-[#F06FB6] hover:text-[#151515] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F06FB6] ${
     prominent
       ? 'gap-3 px-8 py-4 text-lg tracking-[0.08em] sm:px-12 sm:py-5 sm:text-2xl'
@@ -836,22 +950,23 @@ function LiveProjectButton({
 
   if (onClick) {
     return (
-      <button
+      <motion.button
         type="button"
         className={className}
         onClick={onClick}
+        {...magnetic}
         aria-expanded={expanded}
         aria-controls={controls}
       >
         {content}
-      </button>
+      </motion.button>
     );
   }
 
   return (
-    <a href={href} className={className}>
+    <motion.a href={href} className={className} {...magnetic}>
       {content}
-    </a>
+    </motion.a>
   );
 }
 
@@ -1029,14 +1144,12 @@ function ProjectsSection({ onContact }: { onContact: () => void }) {
       className="projects-panel relative z-10 -mt-10 rounded-t-[40px] bg-[#171717] px-5 pt-20 pb-32 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
       aria-labelledby="projects-heading"
     >
-      <FadeIn y={40}>
-        <h2
-          id="projects-heading"
-          className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20"
-        >
-          Project
-        </h2>
-      </FadeIn>
+      <MaskedHeading
+        id="projects-heading"
+        className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20"
+      >
+        Project
+      </MaskedHeading>
 
       <div className="mx-auto max-w-[1500px]">
         {projects.map((project, index) => (
@@ -1045,16 +1158,23 @@ function ProjectsSection({ onContact }: { onContact: () => void }) {
       </div>
 
       <footer id="contact" className="project-contact-footer flex flex-col items-center gap-8 text-center">
-        <motion.img
-          src="/contact-avatar.png"
-          alt="双手托腮、身旁带爱心的卡通女孩表情"
-          loading="lazy"
+        <motion.div
+          className="contact-avatar-wrap relative"
+          data-cursor-interactive
           initial={{ opacity: 0, y: 36, scale: 0.9 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.72, ease: [0.25, 0.1, 0.25, 1] }}
-          className="contact-avatar h-auto w-[clamp(10rem,18vw,15rem)]"
-        />
+        >
+          <span className="contact-heart contact-heart--left" aria-hidden="true">♥</span>
+          <span className="contact-heart contact-heart--right" aria-hidden="true">♥</span>
+          <img
+            src="/contact-avatar.png"
+            alt="双手托腮、身旁带爱心的卡通女孩表情"
+            loading="lazy"
+            className="contact-avatar h-auto w-[clamp(10rem,18vw,15rem)]"
+          />
+        </motion.div>
         <p className="text-sm font-medium tracking-[0.28em] text-[#F8F5F2]/60 uppercase">Available for selected projects</p>
         <ContactButton onClick={onContact} />
         <p className="text-sm text-[#F8F5F2]/40">© 2026 Jack — 3D Creator</p>
@@ -1068,6 +1188,8 @@ export default function Home() {
 
   return (
     <>
+      <ScrollProgress />
+      <CursorHalo />
       <main className="site-shell min-h-screen overflow-x-clip bg-[#F3A7D2]">
         <HeroSection onContact={() => setIsContactOpen(true)} />
         <MarqueeSection />
