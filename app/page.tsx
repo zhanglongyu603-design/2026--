@@ -13,7 +13,6 @@ import {
   AnimatePresence,
   motion,
   useMotionValue,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -423,31 +422,6 @@ function FadeIn({
   );
 }
 
-function MaskedHeading({
-  id,
-  className,
-  children,
-}: {
-  id: string;
-  className: string;
-  children: ReactNode;
-}) {
-  const reduceMotion = useReducedMotion();
-
-  return (
-    <motion.h2
-      id={id}
-      className={`masked-heading ${className}`}
-      initial={reduceMotion ? false : { opacity: 0, y: 64, clipPath: 'inset(0 0 100% 0)' }}
-      whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
-      viewport={{ once: true, amount: 0.45 }}
-      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.h2>
-  );
-}
-
 function useMagneticMotion(strength = 0.16) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -796,9 +770,9 @@ function AboutSection() {
       </div>
 
       <div className="about-profile__content relative z-10">
-        <FadeIn y={-18} className="about-profile__masthead">
+        <div className="about-profile__masthead">
           <div className="about-profile__heading">
-            <MaskedHeading id="about-heading" className="">个人介绍</MaskedHeading>
+            <h2 id="about-heading">个人介绍</h2>
             <p>INTRODUCE MYSELF</p>
           </div>
           <p className="about-profile__edition">PORTFOLIO / 2026</p>
@@ -810,7 +784,7 @@ function AboutSection() {
             <span>EMAIL</span>
             2942981556@qq.com
           </a>
-        </FadeIn>
+        </div>
 
         <div className="about-profile__body">
           <div className="about-profile__resume">
@@ -881,12 +855,12 @@ function ServicesSection() {
       className="services-panel rounded-t-[40px] bg-white px-5 py-20 text-[#151515] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"
       aria-labelledby="contents-heading"
     >
-      <MaskedHeading
+      <h2
         id="contents-heading"
         className="editorial-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight text-[#F06FB6] uppercase sm:mb-20 md:mb-28"
       >
         Contents
-      </MaskedHeading>
+      </h2>
       <ol
         className="border-t border-[rgba(12,12,12,0.15)]"
         style={{ width: 'min(100%, 72rem)', marginInline: 'auto' }}
@@ -1144,12 +1118,12 @@ function ProjectsSection({ onContact }: { onContact: () => void }) {
       className="projects-panel relative z-10 -mt-10 rounded-t-[40px] bg-[#171717] px-5 pt-20 pb-32 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
       aria-labelledby="projects-heading"
     >
-      <MaskedHeading
+      <h2
         id="projects-heading"
         className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black leading-none tracking-tight uppercase sm:mb-20"
       >
         Project
-      </MaskedHeading>
+      </h2>
 
       <div className="mx-auto max-w-[1500px]">
         {projects.map((project, index) => (

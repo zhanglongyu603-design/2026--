@@ -80,10 +80,6 @@ img {
   font-family: var(--font-display);
 }
 
-.masked-heading {
-  will-change: transform, clip-path;
-}
-
 .site-scroll-progress {
   position: fixed;
   top: 0;
