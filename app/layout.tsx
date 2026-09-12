@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Jack — 3D Creator',
+  title: '2026--zhanglongyu',
   description: 'Selected 3D, motion, branding, and digital work by Jack.',
 };
 

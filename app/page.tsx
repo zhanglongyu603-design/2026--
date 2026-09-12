@@ -1151,7 +1151,7 @@ function ProjectsSection({ onContact }: { onContact: () => void }) {
         </motion.div>
         <p className="text-sm font-medium tracking-[0.28em] text-[#F8F5F2]/60 uppercase">Available for selected projects</p>
         <ContactButton onClick={onContact} />
-        <p className="text-sm text-[#F8F5F2]/40">© 2026 Jack — 3D Creator</p>
+        <p className="text-sm text-[#F8F5F2]/40">2026--zhanglongyu</p>
       </footer>
     </section>
   );
